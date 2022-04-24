@@ -91,7 +91,7 @@ public class MainGUI implements MouseListener {
 
     public JPanel fmax(){
         max = new JPanel(null);
-        ImageIcon icon = new ImageIcon("C:\\Users\\Acer\\Desktop\\WorkSpace\\java_Swing\\task1\\image\\maximize_button_32px.png");
+        ImageIcon icon = new ImageIcon("GUI/image/maximize_button_32px.png");
         ImageIcon scaleIcon = new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         JLabel label = new JLabel(scaleIcon, JLabel.CENTER);
         label.setBounds(10, 10, 20, 20);

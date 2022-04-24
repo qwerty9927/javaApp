@@ -57,9 +57,11 @@ public class DB {
             StringBuilder newString = new StringBuilder(string);
             newString.deleteCharAt(string.length()-1);
             string = newString.toString();
+
+            //query
             String sql = String.format("UPDATE %s SET %s %s", table, string, where);
             Statement statement = conn.createStatement();
-            int rowCount = statement.executeUpdate(sql);
+            statement.executeUpdate(sql);
         }catch(Exception e){
             System.out.println(e);
             return false;
@@ -67,13 +69,37 @@ public class DB {
         return true;
     }
 
-    public boolean insert(String table){
-
+    public boolean insert(String table, HashMap<String, String> input){
+        try{
+            String stringKey = "";
+            String stringValue = "";
+            for(Map.Entry<String, String> entry : input.entrySet()){
+                stringKey +=  entry.getKey() + ",";
+                stringValue += "\"" + entry.getValue() + "\"" + ",";
+            }
+            StringBuilder newStringKey = new StringBuilder(stringKey);
+            newStringKey.deleteCharAt(stringKey.length() - 1);
+            StringBuilder newStringValue = new StringBuilder(stringValue);
+            newStringValue.deleteCharAt(stringValue.length() - 1);
+            String sql = "INSERT INTO (" +  stringKey + "VALUES" + stringValue + ")";
+            Statement statement = conn.createStatement();
+            statement.executeUpdate(sql);
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
         return true;
     }
 
-    public boolean delete(){
-
+    public boolean delete(String table, String where){
+        try{
+            String sql = String.format("DELETE %s FROM %s", table, where);
+            Statement statement = conn.createStatement();
+            statement.executeUpdate(sql);
+        } catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
         return true;
     }
     public void closeConnect(){
