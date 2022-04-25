@@ -14,9 +14,9 @@ public class MenuGUI extends JPanel implements MouseListener {
             "San pham", "Khach hang", "Nhan vien"
     };
     String [] listIcon = {
-            "GUI/image/product_60px.png",
-            "GUI/image/user_groups_64px.png",
-            "GUI/image/user_groups_64px.png"
+            "task1/GUI/image/product_60px.png",
+            "task1/GUI/image/user_groups_64px.png",
+            "task1/GUI/image/user_groups_64px.png"
     };
     public MenuGUI(JPanel panel){
         init(panel);
@@ -37,7 +37,7 @@ public class MenuGUI extends JPanel implements MouseListener {
         JPanel panelIcon = new JPanel(null);
         panelIcon.setPreferredSize(new Dimension(200, 200));
         panelIcon.setBackground(Color.decode("#004D40"));
-        JLabel label = new JLabel(createIcon("GUI/image/user.png", 180), JLabel.CENTER);
+        JLabel label = new JLabel(createIcon("task1/GUI/image/user.png", 180), JLabel.CENTER);
         label.setBounds(10, 10, 180, 180);
         panelIcon.add(label);
         add(panelIcon);
@@ -70,6 +70,13 @@ public class MenuGUI extends JPanel implements MouseListener {
             case "Khach hang":
                 panel.removeAll();
                 panel.add(contentOption.khachHang());
+                panel.repaint();
+                panel.revalidate();
+                break;
+
+            case "Nhan vien":
+                panel.removeAll();
+                panel.add(contentOption.nhanVien());
                 panel.repaint();
                 panel.revalidate();
                 break;

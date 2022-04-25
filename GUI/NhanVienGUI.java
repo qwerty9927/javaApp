@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class KhachHangGUI extends JPanel implements MouseListener {
+public class NhanVienGUI extends JPanel implements MouseListener {
     private JPanel panelInput, panelButton, tableKH, input, panelInputBox, panelbtn, panelSearch;
     private JTable table;
     private JButton btn1, btn2, btn3;
@@ -23,13 +23,13 @@ public class KhachHangGUI extends JPanel implements MouseListener {
     };
     private String[] header = {"1", "2", "3", "4", "5", "6", "7", "8", "9", " 10"};
 
-    public KhachHangGUI(){
+    public NhanVienGUI(){
         setLayout(new GridLayout(2, 1, 0, 5));
-        add(Kh_input());
-        add(Kh_table());
+        add(Nv_input());
+        add(Nv_table());
     }
     //input
-    public JPanel Kh_input(){
+    public JPanel Nv_input(){
         input = new JPanel();
         labels = new JLabel[lableInput.length];
         input.setLayout(new BorderLayout(5, 5));
@@ -114,7 +114,7 @@ public class KhachHangGUI extends JPanel implements MouseListener {
     }
 
     //table
-    public JPanel Kh_table(){
+    public JPanel Nv_table(){
         tableKH = new JPanel();
         tableKH.setLayout(new BorderLayout());
         tableKH.setPreferredSize(new Dimension(1000, 300));
@@ -152,7 +152,14 @@ public class KhachHangGUI extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        tableMountClick();
+        //table
+        if(e.getSource() == table) {
+            tableMountClick();
+        }
+        //add
+        //edit
+        //delete
+
     }
 
     @Override

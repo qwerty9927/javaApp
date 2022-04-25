@@ -15,5 +15,12 @@ public class ContainerGUI {
         rootGUI.setBounds(0,0, width, height);
         return rootGUI;
     }
+
+    public JPanel nhanVien(){
+        rootGUI = new NhanVienGUI();
+        rootGUI.setBounds(0,0, width, height);
+        return rootGUI;
+    }
+
 }
 

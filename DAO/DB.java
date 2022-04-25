@@ -75,13 +75,18 @@ public class DB {
             String stringValue = "";
             for(Map.Entry<String, String> entry : input.entrySet()){
                 stringKey +=  entry.getKey() + ",";
-                stringValue += "\"" + entry.getValue() + "\"" + ",";
+                stringValue += "'" + entry.getValue() + "'" + ",";
             }
             StringBuilder newStringKey = new StringBuilder(stringKey);
-            newStringKey.deleteCharAt(stringKey.length() - 1);
+            newStringKey.deleteCharAt(stringKey.length()-1);
+            stringKey = newStringKey.toString();
+
             StringBuilder newStringValue = new StringBuilder(stringValue);
             newStringValue.deleteCharAt(stringValue.length() - 1);
-            String sql = "INSERT INTO (" +  stringKey + "VALUES" + stringValue + ")";
+            stringValue = newStringValue.toString();
+
+            String sql = String.format("INSERT INTO %s (%s) VALUES (%s)", table, stringKey, stringValue);
+            System.out.println(sql);
             Statement statement = conn.createStatement();
             statement.executeUpdate(sql);
         }catch(Exception e){
@@ -93,8 +98,9 @@ public class DB {
 
     public boolean delete(String table, String where){
         try{
-            String sql = String.format("DELETE %s FROM %s", table, where);
+            String sql = String.format("DELETE FROM %s %s", table, where);
             Statement statement = conn.createStatement();
+            System.out.println(sql);
             statement.executeUpdate(sql);
         } catch(Exception e){
             System.out.println(e);
@@ -111,11 +117,26 @@ public class DB {
     }
     public static void main(String args[]){
         DB a = new DB();
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("Username", "HashMap");
-        String where = "Where MATK = 4";
-        a.update("taikhoan", map, where);
-        a.closeConnect();
+        //select
+//        System.out.println(a.select("taikhoan", ""));
+
+        //update
+//        HashMap<String, String> map = new HashMap<String, String>();
+//        map.put("Username", "HashMap");
+//        String where = "Where MATK = 4";
+//        a.update("taikhoan", map, where);
+
+        //insert
+//        HashMap<String, String> map = new HashMap<String, String>();
+//        map.put("MaPN", "1");
+//        map.put("MaNCC", "1");
+//        map.put("Manv", "1");
+//        map.put("TongTien", "10000");
+//        a.insert("phieunhap", map);
+
+        //delete
+//        a.delete("phieunhap", "Where MaPN = '1'");
+//        a.closeConnect();
     }
 }
 
