@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import task1.BUS.NhanVienBUS;
+import task1.DTO.NhanVienDTO;
 
 public class NhanVienGUI extends JPanel implements MouseListener {
     private JPanel panelInput, panelButton, tableNV, input, panelInputBox, panelbtn, panelSearch;
@@ -18,14 +19,8 @@ public class NhanVienGUI extends JPanel implements MouseListener {
     private JLabel[] labels;
     private JTextField searchBox;
     private JTextField[] textFields;
-    private String[] lableInput = {"Ma SV", "Ho Ten", "Ngay Sinh", "Noi Sinh", "Dia Chi", "Dien Thoai", "Hinh Anh", "Email"};
-    private double length = lableInput.length/2;
+    private String[] lableInput;
     private DefaultTableModel tableModel;
-    private Object[][] values = {
-//            {"text1", "text2", "text3", "text4", "text5", "text6", "text7", "text8", "text9", "text10"},
-//            {"text11", "text2", "text3", "text4", "text5", "text6", "text7", "text8", "text9", "text10"}
-//    };
-//    private String[] header = {"1", "2", "3", "4", "5", "6", "7", "8", "9", " 10"};
 
     public NhanVienGUI(){
         setLayout(new GridLayout(2, 1, 0, 5));
@@ -35,7 +30,6 @@ public class NhanVienGUI extends JPanel implements MouseListener {
     //input
     public JPanel Nv_input(){
         input = new JPanel();
-        labels = new JLabel[lableInput.length];
         input.setLayout(new BorderLayout(5, 5));
         input.setPreferredSize(new Dimension(0, 430));
         input.setBackground(Color.white);
@@ -44,6 +38,7 @@ public class NhanVienGUI extends JPanel implements MouseListener {
         input.add(inputBox(), BorderLayout.CENTER);
         return input;
     }
+
     public JPanel inputImage(){
         JPanel info = new JPanel();
         info.setPreferredSize(new Dimension(300, 0));
@@ -53,7 +48,6 @@ public class NhanVienGUI extends JPanel implements MouseListener {
 
     public JPanel inputBox(){
         panelInputBox = new JPanel(new BorderLayout(0, 5));
-//        panelInputBox.setPreferredSize(new Dimension(0, 0));
         panelInputBox.setBackground(Color.blue);
         panelInputBox.add(inputItems(), BorderLayout.CENTER);
         panelInputBox.add(inputButton(), BorderLayout.SOUTH);
@@ -74,6 +68,8 @@ public class NhanVienGUI extends JPanel implements MouseListener {
     }
 
     public JPanel inputItems(){
+        NhanVienDTO dto = new NhanVienDTO();
+        lableInput = dto.getStringHeader();
         panelInput = new JPanel();
         textFields = new JTextField[lableInput.length];
         panelInput.setLayout(new FlowLayout(1, 20, 20));
@@ -136,22 +132,10 @@ public class NhanVienGUI extends JPanel implements MouseListener {
 
     public void tableMountClick(){
         int row = table.getSelectedRow();
-        String col1 = (String) table.getValueAt(row, 0);
-        textFields[0].setText(col1);
-        String col2 = (String) table.getValueAt(row, 1);
-        textFields[1].setText(col2);
-        String col3 = (String) table.getValueAt(row, 2);
-        textFields[2].setText(col3);
-        String col4 = (String) table.getValueAt(row, 3);
-        textFields[3].setText(col4);
-        String col5 = (String) table.getValueAt(row, 4);
-        textFields[4].setText(col5);
-        String col6 = (String) table.getValueAt(row, 5);
-        textFields[5].setText(col6);
-        String col7 = (String) table.getValueAt(row, 6);
-        textFields[6].setText(col7);
-        String col8 = (String) table.getValueAt(row, 7);
-        textFields[7].setText(col8);
+        for(int i = 0;i < lableInput.length;i++){
+            String col = (String) table.getValueAt(row, i);
+            textFields[i].setText(col);
+        }
     }
 
     @Override

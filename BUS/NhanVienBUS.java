@@ -2,21 +2,30 @@ package task1.BUS;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import task1.DAO.NhanVienDAO;
+import task1.DTO.NhanVienDTO;
 
 public class NhanVienBUS {
     public String[][] getAllValues(){
-        ArrayList<HashMap<String, String>> arrmap = new ArrayList<HashMap<String, String>>(a.select("khachhang", ""));
-
-        StringBuilder superString[] = new StringBuilder[5];
-        superString;
+        NhanVienDAO dao = new NhanVienDAO();
+        NhanVienDTO dto[] = dao.getAll();
+        String superString[][] = new String[dto.length][];
+        for(int i = 0;i < dto.length;i++){
+            superString[i] = dto[i].getStringValues();
+        }
+        System.out.println(superString);
+        return superString;
     }
-    public String[] getAllHeader(){
-        ArrayList<HashMap<String, String>> arrmap = new ArrayList<HashMap<String, String>>(a.select("khachhang", ""));
 
-        StringBuilder superString[] = new StringBuilder[];
-        return "hello";
+    public String[] getAllHeader(){
+        NhanVienDTO dto = new NhanVienDTO();
+        return dto.getStringHeader();
     }
     public void addNv(){
 
+    }
+    public static void main(String args[]){
+        NhanVienBUS a = new NhanVienBUS();
+        a.getAllValues();
     }
 }
