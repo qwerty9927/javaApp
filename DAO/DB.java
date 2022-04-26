@@ -118,7 +118,7 @@ public class DB {
     public static void main(String args[]){
         DB a = new DB();
         //select
-//        System.out.println(a.select("taikhoan", ""));
+        System.out.println(a.select("taikhoan", ""));
 
         //update
 //        HashMap<String, String> map = new HashMap<String, String>();

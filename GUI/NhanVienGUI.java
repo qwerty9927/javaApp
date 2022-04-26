@@ -5,9 +5,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import task1.BUS.NhanVienBUS;
 
 public class NhanVienGUI extends JPanel implements MouseListener {
-    private JPanel panelInput, panelButton, tableKH, input, panelInputBox, panelbtn, panelSearch;
+    private JPanel panelInput, panelButton, tableNV, input, panelInputBox, panelbtn, panelSearch;
     private JTable table;
     private JButton btn1, btn2, btn3;
     private JLabel searchJLabel;
@@ -18,10 +22,10 @@ public class NhanVienGUI extends JPanel implements MouseListener {
     private double length = lableInput.length/2;
     private DefaultTableModel tableModel;
     private Object[][] values = {
-            {"text1", "text2", "text3", "text4", "text5", "text6", "text7", "text8", "text9", "text10"},
-            {"text11", "text2", "text3", "text4", "text5", "text6", "text7", "text8", "text9", "text10"}
-    };
-    private String[] header = {"1", "2", "3", "4", "5", "6", "7", "8", "9", " 10"};
+//            {"text1", "text2", "text3", "text4", "text5", "text6", "text7", "text8", "text9", "text10"},
+//            {"text11", "text2", "text3", "text4", "text5", "text6", "text7", "text8", "text9", "text10"}
+//    };
+//    private String[] header = {"1", "2", "3", "4", "5", "6", "7", "8", "9", " 10"};
 
     public NhanVienGUI(){
         setLayout(new GridLayout(2, 1, 0, 5));
@@ -83,7 +87,6 @@ public class NhanVienGUI extends JPanel implements MouseListener {
     public JPanel inputButton(){
         panelbtn = new JPanel();
         panelbtn.setPreferredSize(new Dimension(0, 50));
-        panelbtn.setLayout(new FlowLayout(FlowLayout.CENTER));
         btn1 = createBtn("Them");
         btn2 = createBtn("Sua");
         btn3 = createBtn("Xoa");
@@ -115,18 +118,19 @@ public class NhanVienGUI extends JPanel implements MouseListener {
 
     //table
     public JPanel Nv_table(){
-        tableKH = new JPanel();
-        tableKH.setLayout(new BorderLayout());
-        tableKH.setPreferredSize(new Dimension(1000, 300));
+        tableNV = new JPanel();
+        tableNV.setLayout(new BorderLayout());
+        tableNV.setPreferredSize(new Dimension(1000, 300));
         table();
-        return tableKH;
+        return tableNV;
     }
 
     public void table(){
-        tableModel = new DefaultTableModel(values, header);
+        NhanVienBUS nvBus = new NhanVienBUS();
+        tableModel = new DefaultTableModel(nvBus.getAllValues(), nvBus.getAllHeader());
         table = new JTable(tableModel);
         JScrollPane scrl = new JScrollPane(table);
-        tableKH.add(scrl, BorderLayout.CENTER);
+        tableNV.add(scrl, BorderLayout.CENTER);
         table.addMouseListener(this);
     }
 
