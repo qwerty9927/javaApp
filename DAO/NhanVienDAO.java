@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NhanVienDAO extends DB{
+    private ArrayList<HashMap<String, String>> arrMap;
     public NhanVienDAO(){
-        super();
+        arrMap = new ArrayList<HashMap<String, String>>(select("nhanvien", ""));
     }
-    public NhanVienDTO[] getAll(){
-        ArrayList<HashMap<String, String>> arrMap = new ArrayList<HashMap<String, String>>(select("khachhang", ""));
+    public NhanVienDTO[] getDataDAO(){
         NhanVienDTO dto[] = new NhanVienDTO[arrMap.size()];
         for(int i = 0;i < arrMap.size();i++){
             dto[i] = new NhanVienDTO();
@@ -23,5 +23,13 @@ public class NhanVienDAO extends DB{
         }
         closeConnect();
         return dto;
+    }
+    public void addDAO(){
+        //1. add vao ArrayList
+        //2. add vao database
+    }
+    public int getNextCodeDAO(){
+        int code = Integer.parseInt(arrMap.get(arrMap.size() - 1).get("Makh"));
+        return code + 1;
     }
 }

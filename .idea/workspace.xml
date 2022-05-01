@@ -4,10 +4,8 @@
     <list default="true" id="7f2b03d2-746c-4277-aaf9-3f5b06cf0b8c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BUS/NhanVienBUS.java" beforeDir="false" afterPath="$PROJECT_DIR$/BUS/NhanVienBUS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DAO/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/DAO/DB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DAO/NhanVienDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DAO/NhanVienDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GUI/NhanVienGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/NhanVienGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javaApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/javaApp.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +36,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../lib/mysql-connector-java-8.0.28/mysql-connector-java-8.0.28.jar" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Documents/New folder (2)/QLSieuThi" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
