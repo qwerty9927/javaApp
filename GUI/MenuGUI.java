@@ -1,5 +1,7 @@
 package task1.GUI;
 
+import task1.BUS.MenuBUS;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -7,18 +9,14 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class MenuGUI extends JPanel implements MouseListener {
-    JPanel panel;
+    JPanel panel, currentClick;
     JPanel[] listPanel;
-    //    ArrayList<String> listOption = new ArrayList<String>();
-    String [] listOption = {
-            "San pham", "Khach hang", "Nhan vien"
-    };
-    String [] listIcon = {
-            "GUi/image/product_60px.png",
-            "GUI/image/user_groups_64px.png",
-            "GUI/image/user_groups_64px.png"
-    };
+    String [] listOption;
+    String [] listIcon;
     public MenuGUI(JPanel panel){
+        MenuBUS bus = new MenuBUS();
+        listIcon = bus.getIcon();
+        listOption = bus.getOption();
         init(panel);
     }
 
@@ -29,7 +27,7 @@ public class MenuGUI extends JPanel implements MouseListener {
         menu();
     }
     public ImageIcon createIcon(String path, int size){
-        ImageIcon iconUser = new ImageIcon(path);
+        ImageIcon iconUser = new ImageIcon("GUI/image/" + path);
         ImageIcon scaleIconUser = new ImageIcon(iconUser.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH));
         return scaleIconUser;
     }
@@ -37,7 +35,7 @@ public class MenuGUI extends JPanel implements MouseListener {
         JPanel panelIcon = new JPanel(null);
         panelIcon.setPreferredSize(new Dimension(200, 200));
         panelIcon.setBackground(Color.decode("#004D40"));
-        JLabel label = new JLabel(createIcon("GUI/image/user.png", 180), JLabel.CENTER);
+        JLabel label = new JLabel(createIcon("user.png", 180), JLabel.CENTER);
         label.setBounds(10, 10, 180, 180);
         panelIcon.add(label);
         add(panelIcon);
@@ -65,18 +63,44 @@ public class MenuGUI extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        for (int i = 0; i < listPanel.length; i++) {
+            listPanel[i].setBackground(Color.decode("#004D40"));
+        }
+        currentClick = (JPanel) e.getSource();
+        currentClick.setBackground(Color.decode("#009688"));
         ContainerGUI contentOption = new ContainerGUI(panel.getWidth(), panel.getHeight());
         switch(e.getComponent().getName()){
-            case "Khach hang":
+            case "Khách hàng":
                 panel.removeAll();
                 panel.add(contentOption.khachHang());
                 panel.repaint();
                 panel.revalidate();
                 break;
 
-            case "Nhan vien":
+            case "Nhân viên":
                 panel.removeAll();
                 panel.add(contentOption.nhanVien());
+                panel.repaint();
+                panel.revalidate();
+                break;
+
+            case "Sản phẩm":
+                panel.removeAll();
+                panel.add(contentOption.sanPham());
+                panel.repaint();
+                panel.revalidate();
+                break;
+
+            case "Nhà cung cấp":
+                panel.removeAll();
+                panel.add(contentOption.nhaCungCap());
+                panel.repaint();
+                panel.revalidate();
+                break;
+
+            case "Account":
+                panel.removeAll();
+                panel.add(contentOption.account());
                 panel.repaint();
                 panel.revalidate();
                 break;
@@ -107,11 +131,14 @@ public class MenuGUI extends JPanel implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        for(int i = 0;i < listPanel.length;i++){
-            if(e.getSource() == listPanel[i]){
-                listPanel[i].setBackground(Color.decode("#004D40"));
-                break;
-            }
+        JPanel hover = (JPanel) e.getSource();
+        if(hover != currentClick){
+            hover.setBackground(Color.decode("#004D40"));
         }
+//        if(hover == currentClick){
+//            hover.setBackground(Color.decode("#009688"));
+//        } else {
+
+//        }
     }
 }

@@ -1,65 +1,58 @@
 package task1.GUI;
 
+import task1.BUS.AccountBUS;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
-import org.jdatepicker.JDatePanel;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.SqlDateModel;
-import org.jdatepicker.impl.UtilDateModel;
-import task1.BUS.NhanVienBUS;
 
-public class NhanVienGUI extends JPanel {
+public class AccountGUI extends JPanel {
     private JPanel panelInfoBox, panelInputBox, panelTable, panelInput, panelControl, panelSearch, panelImage, panelSubmit;
     private JTable table;
-    private JButton btnAdd, btnEdit, btnDelete, btnSubmitAdd, btnSubmitEdit, btnSubmitDelete, btnChoiceImage;
+    private JButton btnAdd, btnEdit, btnDelete, btnChoiceImage, btnRole, btnShow;
     private JLabel labelSearch, labelImage;
     private JLabel[] labels;
     private JTextField tFieldSearch;
     private JTextField[] textFields;
-    private JDatePickerImpl workingDate;
-    private JDatePickerImpl dateOfBirth;
+    private JPasswordField password;
+    private JPasswordField rePassword;
     private String[] stringLabel;
+    private String[] stringLabelAdd;
     private DefaultTableModel tableModel;
 
-    private NhanVienBUS bus;
+    private AccountBUS bus;
     private int rowSelect;
     private int length;
-    private int lengthExceptSomeInput;
-    private int posWorkingDateInLength;
-    private int posDateOfBirthInLength;
+    private String[] stringExceptURL;
+    private int lenghtExceptURL;
     private int posURLInLength;
+    private int lengthStringLabelAdd;
     private int status = 0;
-    private String stringValueWorkingDate;
-    private String stringValueDateOfBirth;
     private String nameImage = "default.png";
 
 
-    public NhanVienGUI(){
-        bus = new NhanVienBUS();
+    public AccountGUI(){
+        bus = new AccountBUS();
         stringLabel = bus.getStringHeaderBUS();
         length = stringLabel.length;
-        posDateOfBirthInLength = length - 1;
-        posWorkingDateInLength = length - 2;
-        posURLInLength = length - 3;
-        lengthExceptSomeInput = length - 3;
+        stringExceptURL = bus.getLengthInputBUS();
+        lenghtExceptURL = stringExceptURL.length;
+        posURLInLength = length - 1;
+        stringLabelAdd = bus.getStringHeaderAddBUS();
+        lengthStringLabelAdd = stringLabelAdd.length;
         setLayout(new BorderLayout(0, 5));
-        add(infoNV(), BorderLayout.NORTH);
-        add(tableNV(), BorderLayout.CENTER);
+        add(infoSP(), BorderLayout.NORTH);
+        add(tableSP(), BorderLayout.CENTER);
     }
     //input
-    public JPanel infoNV(){
+    public JPanel infoSP(){
         panelInfoBox = new JPanel();
         panelInfoBox.setLayout(new BorderLayout(5, 5));
         panelInfoBox.setPreferredSize(new Dimension(0, 400));
@@ -87,7 +80,7 @@ public class NhanVienGUI extends JPanel {
         tFieldSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                bus.searchBus(tFieldSearch.getText().toLowerCase());
+                bus.searchBUS(tFieldSearch.getText().toLowerCase());
                 System.out.println(tFieldSearch.getText());
                 panelTable.removeAll();
                 panelTable.add(table());
@@ -97,7 +90,7 @@ public class NhanVienGUI extends JPanel {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                bus.searchBus(tFieldSearch.getText().toLowerCase());
+                bus.searchBUS(tFieldSearch.getText().toLowerCase());
                 System.out.println(tFieldSearch.getText());
                 panelTable.removeAll();
                 panelTable.add(table());
@@ -133,32 +126,42 @@ public class NhanVienGUI extends JPanel {
     }
 
     public void inputItems(){
-        textFields = new JTextField[lengthExceptSomeInput];
-        panelInput.setPreferredSize(new Dimension(0, 200));
+        textFields = new JTextField[lengthStringLabelAdd];
+        panelInput.setPreferredSize(new Dimension(0, 150));
         panelInput.setLayout(new FlowLayout(1, 15, 15));
-        for(int i = 0;i < lengthExceptSomeInput;i++){
+        for(int i = 0;i < lengthStringLabelAdd;i++){
             textFields[i] = new JTextField();
-            panelInput.add(item(new JLabel(stringLabel[i] + " :"), textFields[i]));
+            if(stringLabelAdd[i].equalsIgnoreCase("Manv")){
+                JPanel item = new JPanel(new BorderLayout());
+                JLabel title = new JLabel(stringLabelAdd[i] + " :");
+                btnShow = new JButton("...");
+                btnShow.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        choiceStaff();
+                    }
+                });
+                title.setPreferredSize(new Dimension(100, 25));
+                title.setOpaque(true);
+                title.setBackground(Color.white);
+                textFields[i].setPreferredSize(new Dimension(175, 25));
+                btnShow.setPreferredSize(new Dimension(25, 25));
+                item.add(title, BorderLayout.WEST);
+                item.add(textFields[i], BorderLayout.CENTER);
+                item.add(btnShow, BorderLayout.EAST);
+                panelInput.add(item);
+            } else if(stringLabelAdd[i].equalsIgnoreCase("Password")){
+                textFields[i] = password = new JPasswordField();
+                password.setEchoChar('\u25cf');
+                panelInput.add(item(new JLabel(stringLabelAdd[i] + ";"), textFields[i]));
+            } else if(stringLabelAdd[i].equalsIgnoreCase("Re-Password")){
+                textFields[i] = rePassword = new JPasswordField();
+                rePassword.setEchoChar('\u25cf');
+                panelInput.add(item(new JLabel(stringLabelAdd[i] + ";"), textFields[i]));
+            } else {
+              panelInput.add(item(new JLabel(stringLabelAdd[i] + " :"), textFields[i]));
+            }
         }
-        workingDate = DateBoard();
-        dateOfBirth = DateBoard();
-        workingDate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(workingDate.getModel().getValue());
-            }
-        });
-        dateOfBirth.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(dateOfBirth.getModel().getValue());
-            }
-        });
-
-        panelInput.add(itemOfDate(new JLabel("Ngày vào làm :"), workingDate));
-        panelInput.add(itemOfDate(new JLabel("Ngày sinh :"), dateOfBirth));
-        textFields[0].setEnabled(false);
-        textFields[0].setText(String.valueOf(bus.getNextCodeBUS()));
         panelInput.setBackground(Color.WHITE);
     }
 
@@ -170,57 +173,59 @@ public class NhanVienGUI extends JPanel {
                 choiceImage();
             }
         });
+
+        btnRole = createBtn("Chọn quyền");
+        btnRole.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                choiceRole();
+            }
+        });
+
+        JPanel horizontalBtn = new JPanel();
+        horizontalBtn.setBackground(Color.white);
+        horizontalBtn.setLayout(new BoxLayout(horizontalBtn, BoxLayout.X_AXIS));
+        btnRole.setMaximumSize(new Dimension(120, 40));
         btnChoiceImage.setMaximumSize(new Dimension(120, 40));
-        panelSubmit.add(btnChoiceImage);
+        horizontalBtn.add(btnRole);
+        horizontalBtn.add(Box.createRigidArea(new Dimension(5, 0)));
+        horizontalBtn.add(btnChoiceImage);
+
+        JPanel showHidePassword = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        showHidePassword.setBackground(Color.white);
+        JLabel labelShowHide = new JLabel("Hiện password");
+        JCheckBox checkBox = new JCheckBox();
+        checkBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(checkBox.isSelected()){
+                    labelShowHide.setText("Ẩn password");
+                    password.setEchoChar((char)0);
+                    rePassword.setEchoChar((char)0);
+                } else {
+                    labelShowHide.setText("Hiện password");
+                    password.setEchoChar('\u25cf');
+                    rePassword.setEchoChar('\u25cf');
+                }
+            }
+        });
+        showHidePassword.add(checkBox);
+        showHidePassword.add(labelShowHide);
+        panelSubmit.add(showHidePassword);
+        panelSubmit.add(horizontalBtn);
         panelSubmit.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 
-    public JDatePickerImpl DateBoard(){
-        JDatePickerImpl datePicker;
-        SqlDateModel model = new SqlDateModel();
-        Properties p = new Properties();
-        p.put("text.day", "Day");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        JDatePanelImpl panel = new JDatePanelImpl(model, p);
-        datePicker = new JDatePickerImpl(panel, new JFormattedTextField.AbstractFormatter() {
-            @Override
-            public Object stringToValue(String text) throws ParseException {
-                return null;
-            }
 
-            @Override
-            public String valueToString(Object value) throws ParseException {
-                if(value != null){
-                    Calendar cal = (Calendar) value;
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    String strDate = format.format(cal.getTime());
-                    return strDate;
-                }
-                return "";
-            }
-        });
-        return datePicker;
-    }
-
-    public JPanel item(JLabel title, JTextField inputField){
+    public JPanel item(JLabel title, JTextComponent inputField){
         JPanel item = new JPanel(new BorderLayout());
+        JTextField input = (JTextField) inputField;
         title.setPreferredSize(new Dimension(100, 25));
         title.setOpaque(true);
         title.setBackground(Color.white);
-        inputField.setPreferredSize(new Dimension(200, 25));
+        input.setPreferredSize(new Dimension(200, 25));
         item.add(title, BorderLayout.WEST);
-        item.add(inputField, BorderLayout.CENTER);
-        return item;
-    }
-
-    public JPanel itemOfDate(JLabel title, JDatePickerImpl datePicker){
-        JPanel item = new JPanel(new BorderLayout());
-        title.setPreferredSize(new Dimension(100, 0));
-        title.setOpaque(true);
-        title.setBackground(Color.white);
-        item.add(title, BorderLayout.WEST);
-        item.add(datePicker, BorderLayout.CENTER);
+        item.add(input, BorderLayout.CENTER);
         return item;
     }
 
@@ -241,8 +246,35 @@ public class NhanVienGUI extends JPanel {
         if(result == JFileChooser.APPROVE_OPTION){
             File selectedFile = fileChooser.getSelectedFile();
             nameImage = selectedFile.exists() ? selectedFile.getName() : "default.png";
+            System.out.println(nameImage);
             labelImage.setIcon(resizeImage("GUI/image/" + nameImage, 300, 450));
         }
+    }
+
+    public void choiceStaff(){
+        JFrame frameStaff = new JFrame();
+        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        frameStaff.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+
+
+        frameStaff.setSize(new Dimension(1000, 700));
+        frameStaff.setLocation((width - frameStaff.getWidth())/2, (height -frameStaff.getHeight())/2);
+        frameStaff.setVisible(true);
+    }
+
+    public void choiceRole(){
+        JFrame frameRole = new JFrame();
+        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        frameRole.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+
+
+        frameRole.setSize(new Dimension(500, 500));
+        frameRole.setLocation((width - frameRole.getWidth())/2, (height -frameRole.getHeight())/2);
+        frameRole.setVisible(true);
     }
 
     public JButton addController(){
@@ -253,29 +285,23 @@ public class NhanVienGUI extends JPanel {
                 System.out.println(panelInput.getComponentCount());
                 if(status == 0){
                     int result = bus.checkBUS(textFields);
-                    if(result == 1){
-                        JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                    if(result == 0){
+                        JOptionPane.showMessageDialog(null, "Nhập username");
+                    } else if(result == 1){
+                        JOptionPane.showMessageDialog(null, "Password cần dài hơn 8 ký tự");
                     } else if(result == 2){
-                        JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Re password không trùng khớp");
                     } else if(result == 3){
-                        JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
-                    } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                    } else if(result == 4){
+                        JOptionPane.showMessageDialog(null, "Manv không hơp lệ");
                     } else {
-                        Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
-                        DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
-
-                        Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
-                        DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
-
-                        bus.addBus(textFields, stringValueWorkingDate, stringValueDateOfBirth, nameImage);
+                        bus.addBUS(textFields, nameImage);
                         JOptionPane.showMessageDialog(null, "Thêm thành công");
                         nameImage = "default.png";
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoSP(), BorderLayout.NORTH);
+                        add(tableSP(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -300,27 +326,21 @@ public class NhanVienGUI extends JPanel {
                 if(status == 1){
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
-                        JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Password cần dài hơn 8 ký tự");
                     } else if(result == 2){
-                        JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Re password không trùng khớp");
                     } else if(result == 3){
-                        JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
-                    } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                    } else if(result == 4){
+                        JOptionPane.showMessageDialog(null, "Manv không hơp lệ");
                     } else {
-                        Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
-                        DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
-
-                        Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
-                        DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
-
-                        bus.editBus(textFields, stringValueWorkingDate, stringValueDateOfBirth, nameImage, rowSelect);
+                        bus.editBUS(textFields, nameImage, rowSelect);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
+                        table.getSelectionModel().clearSelection();
+                        status = 0;
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoSP(), BorderLayout.NORTH);
+                        add(tableSP(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -342,12 +362,12 @@ public class NhanVienGUI extends JPanel {
                 } else {
                     int confirm = JOptionPane.showConfirmDialog(null, "Bạn muốn xóa ?");
                     if(confirm == JOptionPane.YES_OPTION){
-                        bus.deleteBus(textFields, 0, rowSelect);
+                        bus.deleteBUS(textFields, 0, rowSelect);
                         table.getSelectionModel().clearSelection();
                         status = 0;
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoSP(), BorderLayout.NORTH);
+                        add(tableSP(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -360,6 +380,7 @@ public class NhanVienGUI extends JPanel {
     public JPanel controller(){
         panelControl = new JPanel();
         panelControl.setPreferredSize(new Dimension(0, 50));
+
         panelControl.add(addController());
         panelControl.add(editController());
         panelControl.add(deleteController());
@@ -376,7 +397,7 @@ public class NhanVienGUI extends JPanel {
     }
 
     //table
-    public JPanel tableNV() {
+    public JPanel tableSP() {
         panelTable = new JPanel();
         panelTable.setLayout(new BorderLayout());
         panelTable.setPreferredSize(new Dimension(0, 250));
@@ -385,15 +406,16 @@ public class NhanVienGUI extends JPanel {
     }
 
     public JScrollPane table(){
-        tableModel = new DefaultTableModel(bus.getAllValuesBUS(), bus.getAllHeaderBUS());
+        tableModel = new DefaultTableModel(bus.getAllValuesBUS(), bus.getStringHeaderBUS());
         table = new JTable(tableModel);
         JScrollPane scrl = new JScrollPane(table);
-        table.addMouseListener(new MouseAdapter() {
+        MouseListener Mlistener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 tableMountClick();
             }
-        });
+        };
+        table.addMouseListener(Mlistener);
         return scrl;
     }
 
@@ -401,34 +423,20 @@ public class NhanVienGUI extends JPanel {
         status = 1;
 
         rowSelect = table.getSelectedRow();
-        for(int i = 0;i < lengthExceptSomeInput;i++){
-            String col = (String) table.getValueAt(rowSelect, i);
-            textFields[i].setText(col);
-        }
+        String col = (String) table.getValueAt(rowSelect, 0);
+        textFields[0].setText(col);
+        textFields[0].setEnabled(false);
+        col = (String) table.getValueAt(rowSelect, 1);
+        textFields[1].setText(col);
+        col = (String) table.getValueAt(rowSelect, 1);
+        textFields[2].setText(col);
+        col = (String) table.getValueAt(rowSelect, 2);
+        textFields[3].setText(col);
+        col = (String) table.getValueAt(rowSelect, 3);
+        textFields[4].setText(col);
 
         // Image
         labelImage.setIcon(resizeImage("GUI/image/" + table.getValueAt(rowSelect, posURLInLength), 300, 400));
         nameImage = (String) table.getValueAt(rowSelect, posURLInLength);
-
-        // Working Date
-        String stringOfWorkingDate = (String) table.getValueAt(rowSelect, posWorkingDateInLength);
-        String[] arrOfWorkingDate = stringOfWorkingDate.split("-");
-        System.out.println(posWorkingDateInLength);
-        System.out.println(stringOfWorkingDate);
-        workingDate.getModel().setSelected(true);
-        workingDate.getModel().setDate(Integer.parseInt(arrOfWorkingDate[0]), Integer.parseInt(arrOfWorkingDate[1]) - 1, Integer.parseInt(arrOfWorkingDate[2]));
-
-        // Date of Birth
-        String stringOfDateOfBirth = (String) table.getValueAt(rowSelect, posDateOfBirthInLength);
-        String[] arrOfDateOfBirth = stringOfDateOfBirth.split("-");
-        dateOfBirth.getModel().setSelected(true);
-        dateOfBirth.getModel().setDate(Integer.parseInt(arrOfDateOfBirth[0]), Integer.parseInt(arrOfDateOfBirth[1]) - 1, Integer.parseInt(arrOfDateOfBirth[2]));
-
-        if(panelInput.getComponentCount() > length - 1){
-            panelInput.remove(panelInput.getComponentCount() - 1);
-            panelSubmit.remove(0);
-            panelSubmit.repaint();
-            panelInput.repaint();
-        }
     }
 }

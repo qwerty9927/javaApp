@@ -12,7 +12,6 @@ public class DB {
     private String username = "root";
     private String password = "";
     public DB(){
-        connect();
     }
     public void connect(){
         try{
@@ -23,7 +22,7 @@ public class DB {
             e.printStackTrace();
         }
     }
-    public ArrayList select(String table, String where){
+    public ArrayList selectAll(String table, String where){
         ArrayList<HashMap> arrList = new ArrayList<HashMap>();
         try{
             String sql = String.format("SELECT * FROM %s %s", table, where);
@@ -46,12 +45,27 @@ public class DB {
         return arrList;
     }
 
+    public int selectOnceRow(String table, String where, String col){
+        int result = 0;
+        try{
+            String sql = String.format("SELECT * FROM %s %s", table, where);
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()){
+                result = Integer.parseInt(rs.getString(col));
+            }
+        } catch(Exception e){
+            System.out.println(e);
+        }
+        return result;
+    }
+
     public boolean update(String table, HashMap<String, String> set, String where){
         try{
             String string = "";
             for(Map.Entry<String, String> entry : set.entrySet()){
                 string += entry.getKey() + " = ";
-                string += "\"" + entry.getValue() + "\""  + ",";
+                string += "'" + entry.getValue() + "'"  + ",";
             }
             //xoa ky tu cuoi
             StringBuilder newString = new StringBuilder(string);
@@ -60,6 +74,7 @@ public class DB {
 
             //query
             String sql = String.format("UPDATE %s SET %s %s", table, string, where);
+            System.out.println(sql);
             Statement statement = conn.createStatement();
             statement.executeUpdate(sql);
         }catch(Exception e){
@@ -111,6 +126,7 @@ public class DB {
     public void closeConnect(){
         try{
             conn.close();
+            System.out.println("Close connect");
         }catch(Exception e){
             System.out.println(e);
         }

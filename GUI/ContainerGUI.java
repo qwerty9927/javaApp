@@ -22,5 +22,23 @@ public class ContainerGUI {
         return rootGUI;
     }
 
+    public JPanel sanPham(){
+        rootGUI = new SanPhamGUI();
+        rootGUI.setBounds(0,0, width, height);
+        return rootGUI;
+    }
+
+    public JPanel nhaCungCap(){
+        rootGUI = new NhaCungCapGUI();
+        rootGUI.setBounds(0,0, width, height);
+        return rootGUI;
+    }
+
+    public JPanel account(){
+        rootGUI = new AccountGUI();
+        rootGUI.setBounds(0,0, width, height);
+        return rootGUI;
+    }
+
 }
 

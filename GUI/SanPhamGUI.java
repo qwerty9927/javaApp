@@ -1,5 +1,7 @@
 package task1.GUI;
 
+import task1.BUS.SanPhamBUS;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -8,19 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
-import org.jdatepicker.JDatePanel;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.SqlDateModel;
-import org.jdatepicker.impl.UtilDateModel;
-import task1.BUS.NhanVienBUS;
 
-public class NhanVienGUI extends JPanel {
+public class SanPhamGUI extends JPanel {
     private JPanel panelInfoBox, panelInputBox, panelTable, panelInput, panelControl, panelSearch, panelImage, panelSubmit;
     private JTable table;
     private JButton btnAdd, btnEdit, btnDelete, btnSubmitAdd, btnSubmitEdit, btnSubmitDelete, btnChoiceImage;
@@ -28,38 +20,33 @@ public class NhanVienGUI extends JPanel {
     private JLabel[] labels;
     private JTextField tFieldSearch;
     private JTextField[] textFields;
-    private JDatePickerImpl workingDate;
-    private JDatePickerImpl dateOfBirth;
+    private JComboBox cb;
     private String[] stringLabel;
     private DefaultTableModel tableModel;
 
-    private NhanVienBUS bus;
+    private SanPhamBUS bus;
     private int rowSelect;
     private int length;
     private int lengthExceptSomeInput;
-    private int posWorkingDateInLength;
-    private int posDateOfBirthInLength;
     private int posURLInLength;
+    private int posKindInLength;
     private int status = 0;
-    private String stringValueWorkingDate;
-    private String stringValueDateOfBirth;
     private String nameImage = "default.png";
 
 
-    public NhanVienGUI(){
-        bus = new NhanVienBUS();
+    public SanPhamGUI(){
+        bus = new SanPhamBUS();
         stringLabel = bus.getStringHeaderBUS();
         length = stringLabel.length;
-        posDateOfBirthInLength = length - 1;
-        posWorkingDateInLength = length - 2;
-        posURLInLength = length - 3;
-        lengthExceptSomeInput = length - 3;
+        posURLInLength = length - 1;
+        posKindInLength = length - 2;
+        lengthExceptSomeInput = length - 2;
         setLayout(new BorderLayout(0, 5));
-        add(infoNV(), BorderLayout.NORTH);
-        add(tableNV(), BorderLayout.CENTER);
+        add(infoSP(), BorderLayout.NORTH);
+        add(tableSP(), BorderLayout.CENTER);
     }
     //input
-    public JPanel infoNV(){
+    public JPanel infoSP(){
         panelInfoBox = new JPanel();
         panelInfoBox.setLayout(new BorderLayout(5, 5));
         panelInfoBox.setPreferredSize(new Dimension(0, 400));
@@ -87,7 +74,7 @@ public class NhanVienGUI extends JPanel {
         tFieldSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                bus.searchBus(tFieldSearch.getText().toLowerCase());
+                bus.searchBUS(tFieldSearch.getText().toLowerCase());
                 System.out.println(tFieldSearch.getText());
                 panelTable.removeAll();
                 panelTable.add(table());
@@ -97,7 +84,7 @@ public class NhanVienGUI extends JPanel {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                bus.searchBus(tFieldSearch.getText().toLowerCase());
+                bus.searchBUS(tFieldSearch.getText().toLowerCase());
                 System.out.println(tFieldSearch.getText());
                 panelTable.removeAll();
                 panelTable.add(table());
@@ -140,25 +127,13 @@ public class NhanVienGUI extends JPanel {
             textFields[i] = new JTextField();
             panelInput.add(item(new JLabel(stringLabel[i] + " :"), textFields[i]));
         }
-        workingDate = DateBoard();
-        dateOfBirth = DateBoard();
-        workingDate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(workingDate.getModel().getValue());
-            }
-        });
-        dateOfBirth.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(dateOfBirth.getModel().getValue());
-            }
-        });
-
-        panelInput.add(itemOfDate(new JLabel("Ngày vào làm :"), workingDate));
-        panelInput.add(itemOfDate(new JLabel("Ngày sinh :"), dateOfBirth));
         textFields[0].setEnabled(false);
+
+        String food[] = {"--Option--", "Thưc ăn", "Đồ uống"};
+        cb = new JComboBox(food);
+        cb.setSelectedIndex(0);
         textFields[0].setText(String.valueOf(bus.getNextCodeBUS()));
+        panelInput.add(itemComboBox(new JLabel("Loại :"), cb));
         panelInput.setBackground(Color.WHITE);
     }
 
@@ -175,34 +150,6 @@ public class NhanVienGUI extends JPanel {
         panelSubmit.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 
-    public JDatePickerImpl DateBoard(){
-        JDatePickerImpl datePicker;
-        SqlDateModel model = new SqlDateModel();
-        Properties p = new Properties();
-        p.put("text.day", "Day");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        JDatePanelImpl panel = new JDatePanelImpl(model, p);
-        datePicker = new JDatePickerImpl(panel, new JFormattedTextField.AbstractFormatter() {
-            @Override
-            public Object stringToValue(String text) throws ParseException {
-                return null;
-            }
-
-            @Override
-            public String valueToString(Object value) throws ParseException {
-                if(value != null){
-                    Calendar cal = (Calendar) value;
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    String strDate = format.format(cal.getTime());
-                    return strDate;
-                }
-                return "";
-            }
-        });
-        return datePicker;
-    }
-
     public JPanel item(JLabel title, JTextField inputField){
         JPanel item = new JPanel(new BorderLayout());
         title.setPreferredSize(new Dimension(100, 25));
@@ -214,13 +161,14 @@ public class NhanVienGUI extends JPanel {
         return item;
     }
 
-    public JPanel itemOfDate(JLabel title, JDatePickerImpl datePicker){
+    public JPanel itemComboBox(JLabel title, JComboBox comboBox){
         JPanel item = new JPanel(new BorderLayout());
-        title.setPreferredSize(new Dimension(100, 0));
+        title.setPreferredSize(new Dimension(50, 25));
         title.setOpaque(true);
         title.setBackground(Color.white);
+        comboBox.setPreferredSize(new Dimension(200, 25));
         item.add(title, BorderLayout.WEST);
-        item.add(datePicker, BorderLayout.CENTER);
+        item.add(comboBox, BorderLayout.CENTER);
         return item;
     }
 
@@ -241,6 +189,7 @@ public class NhanVienGUI extends JPanel {
         if(result == JFileChooser.APPROVE_OPTION){
             File selectedFile = fileChooser.getSelectedFile();
             nameImage = selectedFile.exists() ? selectedFile.getName() : "default.png";
+            System.out.println(nameImage);
             labelImage.setIcon(resizeImage("GUI/image/" + nameImage, 300, 450));
         }
     }
@@ -252,30 +201,23 @@ public class NhanVienGUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println(panelInput.getComponentCount());
                 if(status == 0){
-                    int result = bus.checkBUS(textFields);
+                    int cbSelected = cb.getSelectedIndex();
+                    int result = bus.checkBUS(textFields, cbSelected);
                     if(result == 1){
-                        JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Tên sản phẩm không hợp lệ");
                     } else if(result == 2){
-                        JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ");
                     } else if(result == 3){
-                        JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Giá không hợp lệ");
                     } else if(result == 4){
-                        JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Loại không hợp lệ");
                     } else {
-                        Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
-                        DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
-
-                        Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
-                        DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
-
-                        bus.addBus(textFields, stringValueWorkingDate, stringValueDateOfBirth, nameImage);
+                        bus.addBUS(textFields, nameImage, cbSelected);
                         JOptionPane.showMessageDialog(null, "Thêm thành công");
                         nameImage = "default.png";
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoSP(), BorderLayout.NORTH);
+                        add(tableSP(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -298,29 +240,22 @@ public class NhanVienGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(status == 1){
-                    int result = bus.checkBUS(textFields);
+                    int cbSelected = cb.getSelectedIndex();
+                    int result = bus.checkBUS(textFields, cbSelected);
                     if(result == 1){
-                        JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Tên sản phẩm không hợp lệ");
                     } else if(result == 2){
-                        JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ");
                     } else if(result == 3){
-                        JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Giá không hợp lệ");
                     } else if(result == 4){
-                        JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Loại không hợp lệ");
                     } else {
-                        Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
-                        DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
-
-                        Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
-                        DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
-
-                        bus.editBus(textFields, stringValueWorkingDate, stringValueDateOfBirth, nameImage, rowSelect);
+                        bus.editBUS(textFields, nameImage, rowSelect, cbSelected);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoSP(), BorderLayout.NORTH);
+                        add(tableSP(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -342,12 +277,12 @@ public class NhanVienGUI extends JPanel {
                 } else {
                     int confirm = JOptionPane.showConfirmDialog(null, "Bạn muốn xóa ?");
                     if(confirm == JOptionPane.YES_OPTION){
-                        bus.deleteBus(textFields, 0, rowSelect);
+                        bus.deleteBUS(textFields, 0, rowSelect);
                         table.getSelectionModel().clearSelection();
                         status = 0;
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoSP(), BorderLayout.NORTH);
+                        add(tableSP(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -376,7 +311,7 @@ public class NhanVienGUI extends JPanel {
     }
 
     //table
-    public JPanel tableNV() {
+    public JPanel tableSP() {
         panelTable = new JPanel();
         panelTable.setLayout(new BorderLayout());
         panelTable.setPreferredSize(new Dimension(0, 250));
@@ -399,7 +334,6 @@ public class NhanVienGUI extends JPanel {
 
     public void tableMountClick(){
         status = 1;
-
         rowSelect = table.getSelectedRow();
         for(int i = 0;i < lengthExceptSomeInput;i++){
             String col = (String) table.getValueAt(rowSelect, i);
@@ -410,19 +344,8 @@ public class NhanVienGUI extends JPanel {
         labelImage.setIcon(resizeImage("GUI/image/" + table.getValueAt(rowSelect, posURLInLength), 300, 400));
         nameImage = (String) table.getValueAt(rowSelect, posURLInLength);
 
-        // Working Date
-        String stringOfWorkingDate = (String) table.getValueAt(rowSelect, posWorkingDateInLength);
-        String[] arrOfWorkingDate = stringOfWorkingDate.split("-");
-        System.out.println(posWorkingDateInLength);
-        System.out.println(stringOfWorkingDate);
-        workingDate.getModel().setSelected(true);
-        workingDate.getModel().setDate(Integer.parseInt(arrOfWorkingDate[0]), Integer.parseInt(arrOfWorkingDate[1]) - 1, Integer.parseInt(arrOfWorkingDate[2]));
-
-        // Date of Birth
-        String stringOfDateOfBirth = (String) table.getValueAt(rowSelect, posDateOfBirthInLength);
-        String[] arrOfDateOfBirth = stringOfDateOfBirth.split("-");
-        dateOfBirth.getModel().setSelected(true);
-        dateOfBirth.getModel().setDate(Integer.parseInt(arrOfDateOfBirth[0]), Integer.parseInt(arrOfDateOfBirth[1]) - 1, Integer.parseInt(arrOfDateOfBirth[2]));
+        // ComboBox
+        cb.setSelectedIndex(Integer.parseInt((String) table.getValueAt(rowSelect, posKindInLength)));
 
         if(panelInput.getComponentCount() > length - 1){
             panelInput.remove(panelInput.getComponentCount() - 1);

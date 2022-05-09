@@ -1,41 +1,37 @@
 package task1.DAO;
 
-import task1.DTO.KhachHangDTO;
+import task1.DTO.NhaCungCapDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class KhachHangDAO extends DB{
+public class NhaCungCapDAO extends DB{
     private ArrayList<HashMap<String, String>> arrMap;
     private ArrayList<HashMap<String, String>> arrSearch;
-    public KhachHangDAO(){
+    public NhaCungCapDAO(){
         connect();
-        arrMap = new ArrayList<HashMap<String, String>>(selectAll("khachhang", "WHERE TrangThai = 1"));
+        arrMap = new ArrayList<HashMap<String, String>>(selectAll("nhacungcap", "WHERE TrangThai = 1"));
         arrSearch = new ArrayList<>(arrMap);
         closeConnect();
     }
-    public KhachHangDTO[] getDataDAO(){
-        KhachHangDTO dto[] = new KhachHangDTO[arrSearch.size()];
+    public NhaCungCapDTO[] getDataDAO(){
+        NhaCungCapDTO dto[] = new NhaCungCapDTO[arrSearch.size()];
         for(int i = 0;i < arrSearch.size();i++){
-            dto[i] = new KhachHangDTO();
-            dto[i].setMakh(arrSearch.get(i).get("Makh"));
+            dto[i] = new NhaCungCapDTO();
+            dto[i].setMaNCC(arrSearch.get(i).get("MaNCC"));
             dto[i].setTen(arrSearch.get(i).get("Ten"));
             dto[i].setDiaChi(arrSearch.get(i).get("DiaChi"));
-            dto[i].setEmail(arrSearch.get(i).get("Email"));
             dto[i].setSDT(arrSearch.get(i).get("SDT"));
-            dto[i].setUrlHinh(arrSearch.get(i).get("urlHinh"));
         }
         return dto;
     }
-    public void addDAO(KhachHangDTO obj){
+    public void addDAO(NhaCungCapDTO obj){
         connect();
         HashMap<String, String> row = new HashMap<>();
-        row.put("Makh", obj.getMakh());
+        row.put("MaNCC", obj.getMaNCC());
         row.put("Ten", obj.getTen());
         row.put("DiaChi", obj.getDiaChi());
         row.put("SDT", obj.getSDT());
-        row.put("Email", obj.getEmail());
-        row.put("urlHinh", obj.getUrlHinh());
         row.put("TrangThai", "1");
 
         //1. add vao ArrayList
@@ -43,37 +39,32 @@ public class KhachHangDAO extends DB{
         arrSearch.add(row);
 
         //2. add vao database
-        if(insert("khachhang", row)){
+        if(insert("nhacungcap", row)){
             System.out.println("Success");
         }
         closeConnect();
     }
 
-    public void updateDAO(KhachHangDTO obj, int rowSelect){
+    public void updateDAO(NhaCungCapDTO obj, int rowSelect){
         connect();
         HashMap<String, String> row = new HashMap<>();
         row.put("Ten", obj.getTen());
         row.put("DiaChi", obj.getDiaChi());
         row.put("SDT", obj.getSDT());
-        row.put("Email", obj.getEmail());
-        row.put("urlHinh", obj.getUrlHinh());
+
 
         //1. update to ArrayList
         arrMap.get(rowSelect).put("Ten", obj.getTen());
         arrMap.get(rowSelect).put("DiaChi", obj.getDiaChi());
         arrMap.get(rowSelect).put("SDT", obj.getSDT());
-        arrMap.get(rowSelect).put("Email", obj.getEmail());
 
-        arrMap.get(rowSelect).put("urlHinh", obj.getUrlHinh());
 
         arrSearch.get(rowSelect).put("Ten", obj.getTen());
         arrSearch.get(rowSelect).put("DiaChi", obj.getDiaChi());
         arrSearch.get(rowSelect).put("SDT", obj.getSDT());
-        arrSearch.get(rowSelect).put("Email", obj.getEmail());
-        arrSearch.get(rowSelect).put("urlHinh", obj.getUrlHinh());
 
         //2. update to database
-        if(update("khachhang", row, String.format("WHERE Makh = %s ",obj.getMakh()))){
+        if(update("nhacungcap", row, String.format("WHERE MaNCC = %s ",obj.getMaNCC()))){
             System.out.println("Success");
         }
         closeConnect();
@@ -88,14 +79,14 @@ public class KhachHangDAO extends DB{
         HashMap<String, String> colAffect = new HashMap<>();
         colAffect.put("TrangThai", String.valueOf(status));
         connect();
-        update("khachhang", colAffect, "WHERE Makh = " + colCode);
+        update("nhacungcap", colAffect, "WHERE MaNCC = " + colCode);
         closeConnect();
     }
 
     public void search(String prefix){
         arrSearch = new ArrayList<>();
         for(int i = 0;i<arrMap.size();i++){
-            if(arrMap.get(i).get("Makh").toLowerCase().startsWith(prefix) ||
+            if(arrMap.get(i).get("MaNCC").toLowerCase().startsWith(prefix) ||
                     arrMap.get(i).get("Ten").toLowerCase().startsWith(prefix) ||
                     arrMap.get(i).get("SDT").toLowerCase().startsWith(prefix)){
                 arrSearch.add(arrMap.get(i));
@@ -105,7 +96,7 @@ public class KhachHangDAO extends DB{
 
     public int getNextCodeDAO(){
         connect();
-        int code = selectOnceRow("khachhang", "ORDER BY Makh DESC LIMIT 1", "Makh");
+        int code = selectOnceRow("nhacungcap", "ORDER BY MaNCC DESC LIMIT 1", "MaNCC");
         closeConnect();
         return code + 1;
     }

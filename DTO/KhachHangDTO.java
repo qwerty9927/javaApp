@@ -1,21 +1,19 @@
 package task1.DTO;
 
-public class NhanVienDTO {
-    private String Manv;
+public class KhachHangDTO {
+    private String Makh;
     private String Ten;
     private String DiaChi;
     private String SDT;
     private String Email;
-    private String NgayVaoLam;
-    private String NgaySinh;
     private String urlHinh;
 
-    public String getManv() {
-        return Manv;
+    public String getMakh() {
+        return Makh;
     }
 
-    public void setManv(String manv) {
-        Manv = manv;
+    public void setMakh(String makh) {
+        Makh = makh;
     }
 
     public String getTen() {
@@ -50,23 +48,6 @@ public class NhanVienDTO {
         Email = EMAIL;
     }
 
-    public String getNgayVaoLam() {
-        return NgayVaoLam;
-    }
-
-    public void setNgayVaoLam(String ngayVaoLam) {
-        NgayVaoLam = ngayVaoLam;
-    }
-
-    public String getNgaySinh() {
-        return NgaySinh;
-    }
-
-    public void setNgaySinh(String ngaySinh) {
-        NgaySinh = ngaySinh;
-    }
-
-
     public String getUrlHinh() {
         return urlHinh;
     }
@@ -77,12 +58,12 @@ public class NhanVienDTO {
 
 
     public String[] getStringValues(){
-        String[] row = {getManv(), getTen(), getDiaChi(), getSDT(), getEmail(), getUrlHinh(), getNgayVaoLam(), getNgaySinh()};
+        String[] row = {getMakh(), getTen(), getDiaChi(), getSDT(), getEmail(), getUrlHinh()};
         return row;
     }
 
     public String[] getStringHeader(){
-        String[] row = {"Manv", "Ten", "DiaChi", "SDT", "Email", "urlHinh", "NgayVaoLam", "NgaySinh"};
+        String[] row = {"Makh", "Ten", "DiaChi", "SDT", "Email", "urlHinh"};
         return row;
     }
 }

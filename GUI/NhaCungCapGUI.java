@@ -1,64 +1,48 @@
 package task1.GUI;
 
+import task1.BUS.NhaCungCapBUS;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 
-import task1.BUS.KhachHangBUS;
 
-public class KhachHangGUI extends JPanel {
-    private JPanel panelInfoBox, panelInputBox, panelTable, panelInput, panelControl, panelSearch, panelImage, panelSubmit;
+public class NhaCungCapGUI extends JPanel {
+    private JPanel panelInfoBox, panelInputBox, panelTable, panelInput, panelControl, panelSearch, panelHeader, panelSubmit;
     private JTable table;
-    private JButton btnAdd, btnEdit, btnDelete, btnSubmitAdd, btnSubmitEdit, btnSubmitDelete, btnChoiceImage;
-    private JLabel labelSearch, labelImage;
+    private JButton btnAdd, btnEdit, btnDelete, btnSubmitAdd, btnSubmitEdit, btnSubmitDelete;
+    private JLabel labelSearch;
     private JLabel[] labels;
     private JTextField tFieldSearch;
     private JTextField[] textFields;
     private String[] stringLabel;
     private DefaultTableModel tableModel;
 
-    private KhachHangBUS bus;
+    private NhaCungCapBUS bus;
     private int rowSelect;
     private int length;
-    private int lengthExceptSomeInput;
-    private int posURLInLength;
     private int status = 0;
-    private String nameImage = "default.png";
 
 
-    public KhachHangGUI(){
-        bus = new KhachHangBUS();
+    public NhaCungCapGUI(){
+        bus = new NhaCungCapBUS();
         stringLabel = bus.getStringHeaderBUS();
         length = stringLabel.length;
-        posURLInLength = length - 1;
-        lengthExceptSomeInput = length - 1;
         setLayout(new BorderLayout(0, 5));
-        add(infoNV(), BorderLayout.NORTH);
-        add(tableNV(), BorderLayout.CENTER);
+        add(infoNCC(), BorderLayout.NORTH);
+        add(tableNCC(), BorderLayout.CENTER);
     }
     //input
-    public JPanel infoNV(){
+    public JPanel infoNCC(){
         panelInfoBox = new JPanel();
         panelInfoBox.setLayout(new BorderLayout(5, 5));
         panelInfoBox.setPreferredSize(new Dimension(0, 400));
         panelInfoBox.add(searchBox(), BorderLayout.NORTH);
-        panelInfoBox.add(imageBox(), BorderLayout.WEST);
         panelInfoBox.add(inputBox(), BorderLayout.CENTER);
         return panelInfoBox;
-    }
-
-    public JPanel imageBox(){
-        panelImage = new JPanel();
-        panelImage.setPreferredSize(new Dimension(300, 0));
-        panelImage.setBackground(Color.white);
-        labelImage = new JLabel();
-        panelImage.add(labelImage);
-        return panelImage;
     }
 
     public JPanel searchBox(){
@@ -116,10 +100,10 @@ public class KhachHangGUI extends JPanel {
     }
 
     public void inputItems(){
-        textFields = new JTextField[lengthExceptSomeInput];
+        textFields = new JTextField[length];
         panelInput.setPreferredSize(new Dimension(0, 200));
         panelInput.setLayout(new FlowLayout(1, 15, 15));
-        for(int i = 0;i < lengthExceptSomeInput;i++){
+        for(int i = 0;i < length;i++){
             textFields[i] = new JTextField();
             panelInput.add(item(new JLabel(stringLabel[i] + " :"), textFields[i]));
         }
@@ -129,16 +113,7 @@ public class KhachHangGUI extends JPanel {
     }
 
     public void fetureBtn(){
-        btnChoiceImage = createBtn("Chọn ảnh");
-        btnChoiceImage.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                choiceImage();
-            }
-        });
-        btnChoiceImage.setMaximumSize(new Dimension(120, 40));
-        panelSubmit.add(btnChoiceImage);
-        panelSubmit.add(Box.createRigidArea(new Dimension(0, 5)));
+
     }
 
     public JPanel item(JLabel title, JTextField inputField){
@@ -152,51 +127,25 @@ public class KhachHangGUI extends JPanel {
         return item;
     }
 
-    public ImageIcon resizeImage(String path, int width, int height){
-        ImageIcon image = new ImageIcon(path);
-        System.out.println(path);
-        ImageIcon newImage = new ImageIcon(image.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-        return newImage;
-    }
-
-    public void choiceImage(){
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png");
-        fileChooser.addChoosableFileFilter(filter);
-
-        int result = fileChooser.showOpenDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION){
-            File selectedFile = fileChooser.getSelectedFile();
-            nameImage = selectedFile.exists() ? selectedFile.getName() : "default.png";
-            System.out.println(nameImage);
-            labelImage.setIcon(resizeImage("GUI/image/" + nameImage, 300, 450));
-        }
-    }
-
     public JButton addController(){
         btnAdd = createBtn("Thêm");
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(panelInput.getComponentCount());
                 if(status == 0){
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
-                        JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Tên không hợp lệ");
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
-                    } else if(result == 4){
-                        JOptionPane.showMessageDialog(null, "Email không hợp lệ");
                     } else {
-                        bus.addBUS(textFields, nameImage);
+                        bus.addBUS(textFields);
                         JOptionPane.showMessageDialog(null, "Thêm thành công");
-                        nameImage = "default.png";
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoNCC(), BorderLayout.NORTH);
+                        add(tableNCC(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -206,7 +155,7 @@ public class KhachHangGUI extends JPanel {
                     panelInput.repaint();
                     panelInput.revalidate();
                     status = 0;
-                    labelImage.setIcon(null);
+                    textFields[0].setText(String.valueOf(bus.getNextCodeBUS()));
                 }
             }
         });
@@ -221,20 +170,19 @@ public class KhachHangGUI extends JPanel {
                 if(status == 1){
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
-                        JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        JOptionPane.showMessageDialog(null, "Tên không hợp lệ");
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
-                    } else if(result == 4){
-                        JOptionPane.showMessageDialog(null, "Email không hợp lệ");
                     } else {
-
-                        bus.editBUS(textFields, nameImage, rowSelect);
+                        bus.editBUS(textFields, rowSelect);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
+                        table.getSelectionModel().clearSelection();
+                        status = 0;
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoNCC(), BorderLayout.NORTH);
+                        add(tableNCC(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -260,8 +208,8 @@ public class KhachHangGUI extends JPanel {
                         table.getSelectionModel().clearSelection();
                         status = 0;
                         removeAll();
-                        add(infoNV(), BorderLayout.NORTH);
-                        add(tableNV(), BorderLayout.CENTER);
+                        add(infoNCC(), BorderLayout.NORTH);
+                        add(tableNCC(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -290,7 +238,7 @@ public class KhachHangGUI extends JPanel {
     }
 
     //table
-    public JPanel tableNV() {
+    public JPanel tableNCC() {
         panelTable = new JPanel();
         panelTable.setLayout(new BorderLayout());
         panelTable.setPreferredSize(new Dimension(0, 250));
@@ -313,21 +261,11 @@ public class KhachHangGUI extends JPanel {
 
     public void tableMountClick(){
         status = 1;
+
         rowSelect = table.getSelectedRow();
-        for(int i = 0;i < lengthExceptSomeInput;i++){
+        for(int i = 0;i < length;i++){
             String col = (String) table.getValueAt(rowSelect, i);
             textFields[i].setText(col);
-        }
-
-        // Image
-        labelImage.setIcon(resizeImage("GUI/image/" + table.getValueAt(rowSelect, posURLInLength), 300, 400));
-        nameImage = (String) table.getValueAt(rowSelect, posURLInLength);
-
-        if(panelInput.getComponentCount() > length - 1){
-            panelInput.remove(panelInput.getComponentCount() - 1);
-            panelSubmit.remove(0);
-            panelSubmit.repaint();
-            panelInput.repaint();
         }
     }
 }
