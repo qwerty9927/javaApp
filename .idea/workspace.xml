@@ -3,17 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7f2b03d2-746c-4277-aaf9-3f5b06cf0b8c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BUS/NhanVienBUS.java" beforeDir="false" afterPath="$PROJECT_DIR$/BUS/NhanVienBUS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BUS/AccountBUS.java" beforeDir="false" afterPath="$PROJECT_DIR$/BUS/AccountBUS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAO/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DAO/AccountDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DAO/DB.java" beforeDir="false" afterPath="$PROJECT_DIR$/DAO/DB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DAO/KhachHangDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DAO/KhachHangDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DAO/NhanVienDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DAO/NhanVienDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DTO/NhanVienDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/DTO/NhanVienDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/ContainerGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/ContainerGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI/AccountGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/AccountGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GUI/KhachHangGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/KhachHangGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/MainGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/MainGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/MenuGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/MenuGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI/NhanVienGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/GUI/NhanVienGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javaApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/javaApp.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +23,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/GUI/NhanVienGUI.java" root0="SKIP_INSPECTION" />

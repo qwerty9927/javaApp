@@ -29,6 +29,7 @@ public class DB {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
+            System.out.println(sql);
             int colNumber = rsmd.getColumnCount();
             while(rs.next()){
                 HashMap<String, String> arr = new HashMap<String, String>();

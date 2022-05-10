@@ -41,10 +41,6 @@ public class AccountBUS {
         return dto.getLengthInput();
     }
 
-//    public int getNextCodeBUS(){
-////        return dao.getNextCodeDAO();
-//    }
-
     public String[] getStringHeaderBUS(){
         return dto.getStringHeader();
     }
@@ -74,7 +70,27 @@ public class AccountBUS {
         return -1;
     }
 
-    public void addBUS(JTextComponent[] textFields, String nameImage){
+    public boolean checkUsernameBUS(String username){
+        if(dao.checkUsernameDAO(username)) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getNextRoleIDBUS(){
+        return String.valueOf(dao.getNextRoleIDDAO());
+    }
+
+    public String getRoleIDBUS(String username){
+        for(AccountDTO i : dtoArr){
+            if(i.getUsername().equalsIgnoreCase(username)){
+                return i.getRoleID();
+            }
+        }
+        return "";
+    }
+
+    public void addBUS(JTextComponent[] textFields, String nameImage, String roleID){
         AccountDTO obj = new AccountDTO();
         obj.setUsername(textFields[0].getText());
         obj.setPassword(udao.getSecurityMD5(textFields[1].getText()));
@@ -82,6 +98,7 @@ public class AccountBUS {
         obj.setEmail(textFields[3].getText());
         obj.setManv(textFields[4].getText());
         obj.setUrlHinh(nameImage);
+        obj.setRoleID(roleID);
         dao.addDAO(obj);
     }
 
@@ -104,10 +121,12 @@ public class AccountBUS {
         dao.search(prefix);
     }
 
-
-    public static void main(String args[]){
-//        NhanVienBUS a = new NhanVienBUS();
-//        a.getAllValues();
+    public String getRoleID(String username){
+        for(AccountDTO i : dtoArr){
+            if(i.getUsername().equalsIgnoreCase(username)){
+                return i.getRoleID();
+            }
+        }
+        return "";
     }
-
 }

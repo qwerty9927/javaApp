@@ -14,6 +14,7 @@ public class AccountDAO extends DB{
         arrSearch = new ArrayList<>(arrMap);
         closeConnect();
     }
+
     public AccountDTO[] getDataDAO(){
         AccountDTO dto[] = new AccountDTO[arrSearch.size()];
         for(int i = 0;i < arrSearch.size();i++){
@@ -27,6 +28,7 @@ public class AccountDAO extends DB{
         }
         return dto;
     }
+
     public void addDAO(AccountDTO obj){
         connect();
         HashMap<String, String> row = new HashMap<>();
@@ -35,7 +37,7 @@ public class AccountDAO extends DB{
         row.put("email", obj.getEmail());
         row.put("Manv", obj.getManv());
         row.put("urlHinh", obj.getUrlHinh());
-        row.put("role_id", "2");
+        row.put("role_id", obj.getRoleID());
         row.put("active", "2");
 
         //1. add vao ArrayList
@@ -103,10 +105,24 @@ public class AccountDAO extends DB{
         }
     }
 
-//    public int getNextCodeDAO(){
-//        connect();
-//        int code = selectOnceRow("users", "ORDER BY  DESC LIMIT 1", "MaSP");
-//        closeConnect();
-//        return code + 1;
-//    }
+    public boolean checkUsernameDAO(String username){
+        connect();
+        ArrayList<HashMap<String, String>> arr = selectAll("users", String.format("Where username = '%s'", username));
+//        System.out.println(username);
+//        System.out.println(arr.size());
+        if(arr.size() > 0){
+            closeConnect();
+            return true;
+        } else {
+            closeConnect();
+            return false;
+        }
+    }
+
+    public int getNextRoleIDDAO(){
+        connect();
+        int code = selectOnceRow("users", "ORDER BY role_id DESC LIMIT 1", "role_id");
+        closeConnect();
+        return code + 1;
+    }
 }

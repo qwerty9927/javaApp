@@ -323,11 +323,11 @@ public class KhachHangGUI extends JPanel {
         labelImage.setIcon(resizeImage("GUI/image/" + table.getValueAt(rowSelect, posURLInLength), 300, 400));
         nameImage = (String) table.getValueAt(rowSelect, posURLInLength);
 
-        if(panelInput.getComponentCount() > length - 1){
-            panelInput.remove(panelInput.getComponentCount() - 1);
-            panelSubmit.remove(0);
-            panelSubmit.repaint();
-            panelInput.repaint();
-        }
+//        if(panelInput.getComponentCount() > length - 1){
+//            panelInput.remove(panelInput.getComponentCount() - 1);
+//            panelSubmit.remove(0);
+//            panelSubmit.repaint();
+//            panelInput.repaint();
+//        }
     }
 }

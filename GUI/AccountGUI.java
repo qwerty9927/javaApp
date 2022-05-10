@@ -1,6 +1,7 @@
 package task1.GUI;
 
 import task1.BUS.AccountBUS;
+import task1.BUS.DanhMucBUS;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -28,18 +29,24 @@ public class AccountGUI extends JPanel {
     private DefaultTableModel tableModel;
 
     private AccountBUS bus;
+    private DanhMucBUS busDM;
+    private int[] visited;
     private int rowSelect;
     private int length;
+    private String usernameClick;
     private String[] stringExceptURL;
     private int lenghtExceptURL;
     private int posURLInLength;
     private int lengthStringLabelAdd;
+    public static int changed = 0;
     private int status = 0;
     private String nameImage = "default.png";
 
 
     public AccountGUI(){
         bus = new AccountBUS();
+        busDM = new DanhMucBUS();
+        visited = new int[busDM.getCountCategory()];
         stringLabel = bus.getStringHeaderBUS();
         length = stringLabel.length;
         stringExceptURL = bus.getLengthInputBUS();
@@ -48,11 +55,11 @@ public class AccountGUI extends JPanel {
         stringLabelAdd = bus.getStringHeaderAddBUS();
         lengthStringLabelAdd = stringLabelAdd.length;
         setLayout(new BorderLayout(0, 5));
-        add(infoSP(), BorderLayout.NORTH);
-        add(tableSP(), BorderLayout.CENTER);
+        add(infoACC(), BorderLayout.NORTH);
+        add(tableACC(), BorderLayout.CENTER);
     }
     //input
-    public JPanel infoSP(){
+    public JPanel infoACC(){
         panelInfoBox = new JPanel();
         panelInfoBox.setLayout(new BorderLayout(5, 5));
         panelInfoBox.setPreferredSize(new Dimension(0, 400));
@@ -138,13 +145,14 @@ public class AccountGUI extends JPanel {
                 btnShow.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        choiceStaff();
+                        choiceStaff(textFields[4]);
                     }
                 });
                 title.setPreferredSize(new Dimension(100, 25));
                 title.setOpaque(true);
                 title.setBackground(Color.white);
                 textFields[i].setPreferredSize(new Dimension(175, 25));
+                textFields[i].setEnabled(false);
                 btnShow.setPreferredSize(new Dimension(25, 25));
                 item.add(title, BorderLayout.WEST);
                 item.add(textFields[i], BorderLayout.CENTER);
@@ -216,7 +224,6 @@ public class AccountGUI extends JPanel {
         panelSubmit.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 
-
     public JPanel item(JLabel title, JTextComponent inputField){
         JPanel item = new JPanel(new BorderLayout());
         JTextField input = (JTextField) inputField;
@@ -251,30 +258,12 @@ public class AccountGUI extends JPanel {
         }
     }
 
-    public void choiceStaff(){
-        JFrame frameStaff = new JFrame();
-        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-        frameStaff.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-
-
-        frameStaff.setSize(new Dimension(1000, 700));
-        frameStaff.setLocation((width - frameStaff.getWidth())/2, (height -frameStaff.getHeight())/2);
-        frameStaff.setVisible(true);
+    public void choiceStaff(JTextField tf){
+        SubNhanVienGUI snv = new SubNhanVienGUI(tf);
     }
 
     public void choiceRole(){
-        JFrame frameRole = new JFrame();
-        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-        frameRole.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-
-
-        frameRole.setSize(new Dimension(500, 500));
-        frameRole.setLocation((width - frameRole.getWidth())/2, (height -frameRole.getHeight())/2);
-        frameRole.setVisible(true);
+        DanhMucGUI dm = new DanhMucGUI(visited);
     }
 
     public JButton addController(){
@@ -282,7 +271,6 @@ public class AccountGUI extends JPanel {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(panelInput.getComponentCount());
                 if(status == 0){
                     int result = bus.checkBUS(textFields);
                     if(result == 0){
@@ -296,14 +284,25 @@ public class AccountGUI extends JPanel {
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Manv không hơp lệ");
                     } else {
-                        bus.addBUS(textFields, nameImage);
-                        JOptionPane.showMessageDialog(null, "Thêm thành công");
-                        nameImage = "default.png";
-                        removeAll();
-                        add(infoSP(), BorderLayout.NORTH);
-                        add(tableSP(), BorderLayout.CENTER);
-                        repaint();
-                        revalidate();
+                        if(!bus.checkUsernameBUS(textFields[0].getText())){
+                            String roleID = bus.getNextRoleIDBUS();
+                            if(changed != 0){
+                                busDM.addDM(visited, roleID);
+                                bus.addBUS(textFields, nameImage, roleID);
+                                changed = 0;
+                            } else {
+                                bus.addBUS(textFields, nameImage, roleID);
+                            }
+                            JOptionPane.showMessageDialog(null, "Thêm thành công");
+                            nameImage = "default.png";
+                            removeAll();
+                            add(infoACC(), BorderLayout.NORTH);
+                            add(tableACC(), BorderLayout.CENTER);
+                            repaint();
+                            revalidate();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Tài khoản đã tồn tại");
+                        }
                     }
                 } else {
                     panelInput.removeAll();
@@ -334,13 +333,22 @@ public class AccountGUI extends JPanel {
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Manv không hơp lệ");
                     } else {
+                        System.out.println(changed);
+
+                        if(changed != 0){
+                            System.out.println("change");
+                            String roleID = bus.getRoleIDBUS(usernameClick);
+//                            String newRoleID = bus.getNextRoleIDBUS();
+                            busDM.editDM(visited, roleID);
+                            changed = 0;
+                        }
                         bus.editBUS(textFields, nameImage, rowSelect);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
                         table.getSelectionModel().clearSelection();
                         status = 0;
                         removeAll();
-                        add(infoSP(), BorderLayout.NORTH);
-                        add(tableSP(), BorderLayout.CENTER);
+                        add(infoACC(), BorderLayout.NORTH);
+                        add(tableACC(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -366,8 +374,8 @@ public class AccountGUI extends JPanel {
                         table.getSelectionModel().clearSelection();
                         status = 0;
                         removeAll();
-                        add(infoSP(), BorderLayout.NORTH);
-                        add(tableSP(), BorderLayout.CENTER);
+                        add(infoACC(), BorderLayout.NORTH);
+                        add(tableACC(), BorderLayout.CENTER);
                         repaint();
                         revalidate();
                     }
@@ -397,7 +405,7 @@ public class AccountGUI extends JPanel {
     }
 
     //table
-    public JPanel tableSP() {
+    public JPanel tableACC() {
         panelTable = new JPanel();
         panelTable.setLayout(new BorderLayout());
         panelTable.setPreferredSize(new Dimension(0, 250));
@@ -424,6 +432,7 @@ public class AccountGUI extends JPanel {
 
         rowSelect = table.getSelectedRow();
         String col = (String) table.getValueAt(rowSelect, 0);
+        usernameClick = col;
         textFields[0].setText(col);
         textFields[0].setEnabled(false);
         col = (String) table.getValueAt(rowSelect, 1);
@@ -434,6 +443,9 @@ public class AccountGUI extends JPanel {
         textFields[3].setText(col);
         col = (String) table.getValueAt(rowSelect, 3);
         textFields[4].setText(col);
+
+        //take category
+        visited = busDM.getCategory(bus.getRoleID((String) table.getValueAt(rowSelect, 0)));
 
         // Image
         labelImage.setIcon(resizeImage("GUI/image/" + table.getValueAt(rowSelect, posURLInLength), 300, 400));
