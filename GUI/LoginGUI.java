@@ -14,7 +14,7 @@ import java.awt.event.MouseListener;
 public class LoginGUI extends JPanel implements MouseListener, ActionListener {
     private JFrame f;
     private JPanel panel, p1;
-    private JButton btnlogin,btn2;
+    private JButton btnlogin;
     private JTextField usernametxt;
     private JPasswordField passwordtxt;
     private JLabel lbl1, lbl2, lbl3;
@@ -22,6 +22,7 @@ public class LoginGUI extends JPanel implements MouseListener, ActionListener {
     private int height = Toolkit.getDefaultToolkit().getScreenSize().height;
 
     public static int roleID;
+    public static String manvTK;
     public LoginGUI() {
         init();
     }
@@ -41,6 +42,7 @@ public class LoginGUI extends JPanel implements MouseListener, ActionListener {
         f.setLocation((width - f.getWidth())/2, (height -f.getHeight())/2);
         f.setVisible(true);
     }
+
     public JPanel Login() {
         panel = new JPanel();
         p1 = new JPanel();
@@ -87,30 +89,11 @@ public class LoginGUI extends JPanel implements MouseListener, ActionListener {
                 logigBTNActionPerformed(e);
             }
         });
-        btn2 = new JButton("Dang ky");
-        btn2.setLayout(new FlowLayout());
-        btn2.setBackground(Color.GREEN);
-        btn2.setPreferredSize(new Dimension(100,35));
-      btn2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               registerBtnActionPerformed(e);
-            }
-        });
         panel.add(btnlogin);
-        panel.add(btn2);
         panel.setPreferredSize(new Dimension(450,350));
         return panel;
     }
-    private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegisterGUI().setVisible(true);
-            }
-        });
-        setVisible(false);
-        f.dispose();
-    }
+
     private void logigBTNActionPerformed(java.awt.event.ActionEvent e) {
         String username = usernametxt.getText();
         String password = passwordtxt.getText();
@@ -138,6 +121,7 @@ public class LoginGUI extends JPanel implements MouseListener, ActionListener {
                     public void run() {
 
                         roleID = user.getRoleID();
+                        manvTK = user.getManvTK();
                         MainGUI m = new MainGUI();
                     }
                 });

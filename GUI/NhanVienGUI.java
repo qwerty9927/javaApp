@@ -155,8 +155,8 @@ public class NhanVienGUI extends JPanel {
             }
         });
 
-        panelInput.add(itemOfDate(new JLabel("Ngày vào làm :"), workingDate));
         panelInput.add(itemOfDate(new JLabel("Ngày sinh :"), dateOfBirth));
+        panelInput.add(itemOfDate(new JLabel("Ngày vào làm :"), workingDate));
         textFields[0].setEnabled(false);
         textFields[0].setText(String.valueOf(bus.getNextCodeBUS()));
         panelInput.setBackground(Color.WHITE);
@@ -164,6 +164,7 @@ public class NhanVienGUI extends JPanel {
 
     public void fetureBtn(){
         btnChoiceImage = createBtn("Chọn ảnh");
+        RoundedBorder.BorderRadius2(btnChoiceImage);
         btnChoiceImage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -247,6 +248,7 @@ public class NhanVienGUI extends JPanel {
 
     public JButton addController(){
         btnAdd = createBtn("Thêm");
+        RoundedBorder.BorderRadius1(btnAdd);
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -255,20 +257,54 @@ public class NhanVienGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        textFields[4].requestFocus();
+                        textFields[4].selectAll();
                     } else {
-                        Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
-                        DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
+                        String[] arrWorkingDate = null;
+                        String[] arrDateOfBirth = null;
+                        try{
+                            Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
+                            DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
+                            stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
+                            arrDateOfBirth = stringValueDateOfBirth.split("-");
+                            if(arrWorkingDate != null){
+                                if(Integer.parseInt(arrDateOfBirth[0]) > Integer.parseInt(arrWorkingDate[0]) - 18){
+                                    JOptionPane.showMessageDialog(null, "Ngày tháng không hợp lệ");
+                                    return;
+                                }
+                            }
+                        } catch(Exception ex){
+                            JOptionPane.showMessageDialog(null, "Cần chọn ngày sinh");
+                            return;
+                        }
 
-                        Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
-                        DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
+                        try{
+                            Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
+                            DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
+                            stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
+                            arrWorkingDate = stringValueWorkingDate.split("-");
+                            if(arrDateOfBirth != null){
+                                if(Integer.parseInt(arrDateOfBirth[0]) > Integer.parseInt(arrWorkingDate[0]) - 18){
+                                    JOptionPane.showMessageDialog(null, "Ngày tháng không hợp lệ");
+                                    return;
+                                }
+                            }
+                        } catch(Exception ex){
+                            JOptionPane.showMessageDialog(null, "Cần chọn ngày vào làm");
+                            return;
+                        }
 
                         bus.addBus(textFields, stringValueWorkingDate, stringValueDateOfBirth, nameImage);
                         JOptionPane.showMessageDialog(null, "Thêm thành công");
@@ -294,6 +330,7 @@ public class NhanVienGUI extends JPanel {
 
     public JButton editController(){
         btnEdit = createBtn("Sửa");
+        RoundedBorder.BorderRadius1(btnEdit);
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -301,20 +338,54 @@ public class NhanVienGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        textFields[4].requestFocus();
+                        textFields[4].selectAll();
                     } else {
-                        Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
-                        DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
+                        String[] arrWorkingDate = null;
+                        String[] arrDateOfBirth = null;
+                        try{
+                            Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
+                            DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
+                            stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
+                            arrDateOfBirth = stringValueDateOfBirth.split("-");
+                            if(arrWorkingDate != null){
+                                if(Integer.parseInt(arrDateOfBirth[0]) > Integer.parseInt(arrWorkingDate[0]) - 18){
+                                    JOptionPane.showMessageDialog(null, "Ngày tháng không hợp lệ");
+                                    return;
+                                }
+                            }
+                        } catch(Exception ex){
+                            JOptionPane.showMessageDialog(null, "Cần chọn ngày sinh");
+                            return;
+                        }
 
-                        Date selectedaDateOfBirth = (Date) dateOfBirth.getModel().getValue();
-                        DateFormat dfDateOfBirth = new SimpleDateFormat("yyyy-MM-dd");
-                        stringValueDateOfBirth = dfDateOfBirth.format(selectedaDateOfBirth);
+                        try{
+                            Date selectedOfWorkingDate = (Date) workingDate.getModel().getValue();
+                            DateFormat dfWorkingDate = new SimpleDateFormat("yyyy-MM-dd");
+                            stringValueWorkingDate = dfWorkingDate.format(selectedOfWorkingDate);
+                            arrWorkingDate = stringValueWorkingDate.split("-");
+                            if(arrDateOfBirth != null){
+                                if(Integer.parseInt(arrDateOfBirth[0]) > Integer.parseInt(arrWorkingDate[0]) - 18){
+                                    JOptionPane.showMessageDialog(null, "Ngày tháng không hợp lệ");
+                                    return;
+                                }
+                            }
+                        } catch(Exception ex){
+                            JOptionPane.showMessageDialog(null, "Cần chọn ngày vào làm");
+                            return;
+                        }
 
                         bus.editBus(textFields, stringValueWorkingDate, stringValueDateOfBirth, nameImage, rowSelect);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
@@ -334,6 +405,7 @@ public class NhanVienGUI extends JPanel {
 
     public JButton deleteController(){
         btnDelete = createBtn("Xóa");
+        RoundedBorder.BorderRadius1(btnDelete);
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

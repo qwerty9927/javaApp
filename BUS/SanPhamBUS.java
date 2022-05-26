@@ -15,6 +15,7 @@ public class SanPhamBUS {
     private SanPhamDAO dao;
     private SanPhamDTO dtoArr[];
     private SanPhamDTO dto;
+    private ArrayList<SanPhamDTO> dssp = new ArrayList<>();
     public SanPhamBUS(){
         dao = new SanPhamDAO();
         dto = new SanPhamDTO();
@@ -42,11 +43,12 @@ public class SanPhamBUS {
     }
 
     public int checkBUS(JTextField[] textFields, int cbSelected){
-        String name = "[a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z][a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z0-9-_ ]{4,24}";
+        String name = "[a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z][a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z0-9-_ ]{1,24}";
         String quantity = "^[1-9][0-9]*$";
         String regexs[] = {name, quantity, quantity};
         int i;
         for(i = 1;i < textFields.length;i++) {
+            if(i == 2) continue;
             Pattern pattern = Pattern.compile(regexs[i - 1], Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(textFields[i].getText());
             if (!matcher.find()) {
@@ -88,6 +90,32 @@ public class SanPhamBUS {
     public void searchBUS(String prefix){
         dao.search(prefix);
     }
+
+    //Tan new update
+    public void updateSLSP(String MaSP, int SoLuongSP){
+        dao.updateSLSP(MaSP, SoLuongSP);
+    }
+
+    //Đạt
+    public void ListLoaiSP(String Loai){
+        dao = new SanPhamDAO();
+        dssp = new ArrayList<>();
+        dssp = dao.getDanhSachLoaiSanPham(Loai);
+    }
+    public ArrayList<SanPhamDTO> getList() {
+        return dssp;
+    }
+    public boolean checkSL(String masp , int sl)
+    {
+        for(SanPhamDTO sp:dssp)
+            if(sp.getMaSP().equals(masp))
+                if(sl>Integer.parseInt(sp.getSoLuongSP())){
+                    JOptionPane.showMessageDialog(null,"Hàng trong kho không đủ");
+                    return false;
+                }
+        return true;
+    }
+
 
 
     public static void main(String args[]){

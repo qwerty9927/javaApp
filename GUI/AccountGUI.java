@@ -34,6 +34,7 @@ public class AccountGUI extends JPanel {
     private int rowSelect;
     private int length;
     private String usernameClick;
+    private int passChanged = 0;
     private String[] stringExceptURL;
     private int lenghtExceptURL;
     private int posURLInLength;
@@ -160,6 +161,24 @@ public class AccountGUI extends JPanel {
                 panelInput.add(item);
             } else if(stringLabelAdd[i].equalsIgnoreCase("Password")){
                 textFields[i] = password = new JPasswordField();
+                password.getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        passChanged = 1;
+                        System.out.println(passChanged);
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        passChanged = 1;
+                        System.out.println(passChanged);
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+
+                    }
+                });
                 password.setEchoChar('\u25cf');
                 panelInput.add(item(new JLabel(stringLabelAdd[i] + ";"), textFields[i]));
             } else if(stringLabelAdd[i].equalsIgnoreCase("Re-Password")){
@@ -175,6 +194,7 @@ public class AccountGUI extends JPanel {
 
     public void fetureBtn(){
         btnChoiceImage = createBtn("Chọn ảnh");
+        RoundedBorder.BorderRadius2(btnChoiceImage);
         btnChoiceImage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -183,6 +203,7 @@ public class AccountGUI extends JPanel {
         });
 
         btnRole = createBtn("Chọn quyền");
+        RoundedBorder.BorderRadius2(btnRole);
         btnRole.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -268,6 +289,7 @@ public class AccountGUI extends JPanel {
 
     public JButton addController(){
         btnAdd = createBtn("Thêm");
+        RoundedBorder.BorderRadius1(btnAdd);
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -275,12 +297,20 @@ public class AccountGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 0){
                         JOptionPane.showMessageDialog(null, "Nhập username");
+                        textFields[0].requestFocus();
+                        textFields[0].selectAll();
                     } else if(result == 1){
                         JOptionPane.showMessageDialog(null, "Password cần dài hơn 8 ký tự");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Re password không trùng khớp");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Manv không hơp lệ");
                     } else {
@@ -319,6 +349,7 @@ public class AccountGUI extends JPanel {
 
     public JButton editController(){
         btnEdit = createBtn("Sửa");
+        RoundedBorder.BorderRadius1(btnEdit);
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -326,10 +357,16 @@ public class AccountGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Password cần dài hơn 8 ký tự");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Re password không trùng khớp");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Manv không hơp lệ");
                     } else {
@@ -342,7 +379,7 @@ public class AccountGUI extends JPanel {
                             busDM.editDM(visited, roleID);
                             changed = 0;
                         }
-                        bus.editBUS(textFields, nameImage, rowSelect);
+                        bus.editBUS(textFields, nameImage, rowSelect, passChanged);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
                         table.getSelectionModel().clearSelection();
                         status = 0;
@@ -362,6 +399,7 @@ public class AccountGUI extends JPanel {
 
     public JButton deleteController(){
         btnDelete = createBtn("Xóa");
+        RoundedBorder.BorderRadius1(btnDelete);
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -450,5 +488,7 @@ public class AccountGUI extends JPanel {
         // Image
         labelImage.setIcon(resizeImage("GUI/image/" + table.getValueAt(rowSelect, posURLInLength), 300, 400));
         nameImage = (String) table.getValueAt(rowSelect, posURLInLength);
+        passChanged = 0;
+
     }
 }

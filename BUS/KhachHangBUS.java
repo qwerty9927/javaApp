@@ -14,6 +14,7 @@ public class KhachHangBUS {
     private KhachHangDAO dao;
     private KhachHangDTO dtoArr[];
     private KhachHangDTO dto;
+    private ArrayList<KhachHangDTO> dskh = new ArrayList<>();
     public KhachHangBUS(){
         dao = new KhachHangDAO();
         dto = new KhachHangDTO();
@@ -41,7 +42,7 @@ public class KhachHangBUS {
     }
 
     public int checkBUS(JTextField[] textFields){
-        String name = "[a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z][a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z0-9-_ ]{4,24}";
+        String name = "[a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z][a-zvxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđA-Z0-9-_ ]{1,24}";
         String address = "[a-zA-Z][a-zA-Z0-9-_/]{4,24}";
         String phoneNumber = "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})";
         String email = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
@@ -87,7 +88,15 @@ public class KhachHangBUS {
         dao.search(prefix);
     }
 
-
+    //Đạt
+    public void listKHTheoMa(String makh){
+        KhachHangDAO khDAO = new KhachHangDAO();
+        dskh = new ArrayList<>();
+        dskh = khDAO.getKhachHangTheoMa(makh);
+    }
+    public ArrayList<KhachHangDTO> getList() {
+        return dskh;
+    }
     public static void main(String args[]){
 //        NhanVienBUS a = new NhanVienBUS();
 //        a.getAllValues();

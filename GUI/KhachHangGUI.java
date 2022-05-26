@@ -130,6 +130,7 @@ public class KhachHangGUI extends JPanel {
 
     public void fetureBtn(){
         btnChoiceImage = createBtn("Chọn ảnh");
+        RoundedBorder.BorderRadius2(btnChoiceImage);
         btnChoiceImage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -176,6 +177,7 @@ public class KhachHangGUI extends JPanel {
 
     public JButton addController(){
         btnAdd = createBtn("Thêm");
+        RoundedBorder.BorderRadius1(btnAdd);
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -184,12 +186,20 @@ public class KhachHangGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        textFields[4].requestFocus();
+                        textFields[4].selectAll();
                     } else {
                         bus.addBUS(textFields, nameImage);
                         JOptionPane.showMessageDialog(null, "Thêm thành công");
@@ -215,6 +225,7 @@ public class KhachHangGUI extends JPanel {
 
     public JButton editController(){
         btnEdit = createBtn("Sửa");
+        RoundedBorder.BorderRadius1(btnEdit);
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -222,12 +233,20 @@ public class KhachHangGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+                        textFields[4].requestFocus();
+                        textFields[4].selectAll();
                     } else {
 
                         bus.editBUS(textFields, nameImage, rowSelect);
@@ -248,6 +267,7 @@ public class KhachHangGUI extends JPanel {
 
     public JButton deleteController(){
         btnDelete = createBtn("Xóa");
+        RoundedBorder.BorderRadius1(btnDelete);
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -323,11 +343,5 @@ public class KhachHangGUI extends JPanel {
         labelImage.setIcon(resizeImage("GUI/image/" + table.getValueAt(rowSelect, posURLInLength), 300, 400));
         nameImage = (String) table.getValueAt(rowSelect, posURLInLength);
 
-//        if(panelInput.getComponentCount() > length - 1){
-//            panelInput.remove(panelInput.getComponentCount() - 1);
-//            panelSubmit.remove(0);
-//            panelSubmit.repaint();
-//            panelInput.repaint();
-//        }
     }
 }

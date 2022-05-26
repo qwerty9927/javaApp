@@ -5,12 +5,15 @@ package task1.DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DB {
     public Connection conn;
     private String url = "jdbc:mysql://localhost:3306/java_ch";
     private String username = "root";
     private String password = "";
+    private ResultSet rs = null;
     public DB(){
     }
     public void connect(){
@@ -124,6 +127,26 @@ public class DB {
         }
         return true;
     }
+    //Đạt
+    public ResultSet executeQuery(PreparedStatement stm) {
+        try {
+            connect();
+            rs = stm.executeQuery();
+            return rs;
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    //Đạt
+    public void executeUpdate(PreparedStatement stm){
+        try{
+            connect();
+            stm.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE,null,ex);
+        }
+    }
     public void closeConnect(){
         try{
             conn.close();
@@ -131,6 +154,10 @@ public class DB {
         }catch(Exception e){
             System.out.println(e);
         }
+    }
+    //Đạt
+    public Connection getConnection(){
+        return conn;
     }
     public static void main(String args[]){
 //        DB a = new DB();

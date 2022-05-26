@@ -22,6 +22,7 @@ public class SanPhamGUI extends JPanel {
     private JTextField[] textFields;
     private JComboBox cb;
     private String[] stringLabel;
+
     private DefaultTableModel tableModel;
 
     private SanPhamBUS bus;
@@ -31,7 +32,7 @@ public class SanPhamGUI extends JPanel {
     private int posURLInLength;
     private int posKindInLength;
     private int status = 0;
-    private String nameImage = "default.png";
+    private String nameImage = "defaultFood.png";
 
 
     public SanPhamGUI(){
@@ -125,9 +126,15 @@ public class SanPhamGUI extends JPanel {
         panelInput.setLayout(new FlowLayout(1, 15, 15));
         for(int i = 0;i < lengthExceptSomeInput;i++){
             textFields[i] = new JTextField();
+//            if(textFields[i].equalsIgnoreCase("SoLuongSP")){
+//                textFields[i].setEnabled(false);
+//                textFields[i].setText("0");
+//            }
             panelInput.add(item(new JLabel(stringLabel[i] + " :"), textFields[i]));
         }
         textFields[0].setEnabled(false);
+        textFields[2].setEnabled(false);
+        textFields[2].setText("0");
 
         String food[] = {"--Option--", "Thưc ăn", "Đồ uống"};
         cb = new JComboBox(food);
@@ -139,6 +146,7 @@ public class SanPhamGUI extends JPanel {
 
     public void fetureBtn(){
         btnChoiceImage = createBtn("Chọn ảnh");
+        RoundedBorder.BorderRadius2(btnChoiceImage);
         btnChoiceImage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -188,7 +196,7 @@ public class SanPhamGUI extends JPanel {
         int result = fileChooser.showOpenDialog(this);
         if(result == JFileChooser.APPROVE_OPTION){
             File selectedFile = fileChooser.getSelectedFile();
-            nameImage = selectedFile.exists() ? selectedFile.getName() : "default.png";
+            nameImage = selectedFile.exists() ? selectedFile.getName() : "defaultFood.png";
             System.out.println(nameImage);
             labelImage.setIcon(resizeImage("GUI/image/" + nameImage, 300, 450));
         }
@@ -196,6 +204,7 @@ public class SanPhamGUI extends JPanel {
 
     public JButton addController(){
         btnAdd = createBtn("Thêm");
+        RoundedBorder.BorderRadius1(btnAdd);
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -205,16 +214,18 @@ public class SanPhamGUI extends JPanel {
                     int result = bus.checkBUS(textFields, cbSelected);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Tên sản phẩm không hợp lệ");
-                    } else if(result == 2){
-                        JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Giá không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Loại không hợp lệ");
                     } else {
                         bus.addBUS(textFields, nameImage, cbSelected);
                         JOptionPane.showMessageDialog(null, "Thêm thành công");
-                        nameImage = "default.png";
+                        nameImage = "defaultFood.png";
                         removeAll();
                         add(infoSP(), BorderLayout.NORTH);
                         add(tableSP(), BorderLayout.CENTER);
@@ -236,6 +247,7 @@ public class SanPhamGUI extends JPanel {
 
     public JButton editController(){
         btnEdit = createBtn("Sửa");
+        RoundedBorder.BorderRadius1(btnEdit);
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -244,10 +256,12 @@ public class SanPhamGUI extends JPanel {
                     int result = bus.checkBUS(textFields, cbSelected);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Tên sản phẩm không hợp lệ");
-                    } else if(result == 2){
-                        JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Giá không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else if(result == 4){
                         JOptionPane.showMessageDialog(null, "Loại không hợp lệ");
                     } else {
@@ -269,6 +283,7 @@ public class SanPhamGUI extends JPanel {
 
     public JButton deleteController(){
         btnDelete = createBtn("Xóa");
+        RoundedBorder.BorderRadius1(btnDelete);
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

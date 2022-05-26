@@ -51,25 +51,31 @@ public class AccountDAO extends DB{
         closeConnect();
     }
 
-    public void updateDAO(AccountDTO obj, int rowSelect){
+    public void updateDAO(AccountDTO obj, int rowSelect, int passChange){
         connect();
         HashMap<String, String> row = new HashMap<>();
         row.put("username", obj.getUsername());
-        row.put("password", obj.getPassword());
+        if(passChange == 1){
+            row.put("password", obj.getPassword());
+        }
         row.put("email", obj.getEmail());
         row.put("Manv", obj.getManv());
         row.put("urlHinh", obj.getUrlHinh());
 
         //1. update to ArrayList
         arrMap.get(rowSelect).put("username", obj.getUsername());
-        arrMap.get(rowSelect).put("password", obj.getPassword());
+        if(passChange == 1){
+            arrMap.get(rowSelect).put("password", obj.getPassword());
+        }
         arrMap.get(rowSelect).put("email", obj.getEmail());
         arrMap.get(rowSelect).put("Manv", obj.getManv());
         arrMap.get(rowSelect).put("urlHinh", obj.getUrlHinh());
 
 
         arrMap.get(rowSelect).put("username", obj.getUsername());
-        arrMap.get(rowSelect).put("password", obj.getPassword());
+        if(passChange == 1){
+            arrMap.get(rowSelect).put("password", obj.getPassword());
+        }
         arrMap.get(rowSelect).put("email", obj.getEmail());
         arrMap.get(rowSelect).put("Manv", obj.getManv());
         arrMap.get(rowSelect).put("urlHinh", obj.getUrlHinh());

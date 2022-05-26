@@ -48,7 +48,7 @@ public class MainGUI implements MouseListener {
         p2 = new JPanel();
         p2.setBackground(Color.decode("#004D40"));
 //        p2.add(new MenuGUI(p3, roleID));
-        p2.add(new MenuGUI(p3));
+        p2.add(new MenuGUI(p3, frame));
         p2.setPreferredSize(new Dimension(200, 0));
         return p2;
     }

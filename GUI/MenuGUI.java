@@ -9,11 +9,13 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class MenuGUI extends JPanel implements MouseListener {
-    JPanel panel, currentClick;
+    JFrame frame;
+    JPanel panel, currentClick, logOut;
     JPanel[] listPanel;
     String [] listOption;
     String [] listIcon;
-    public MenuGUI(JPanel panel){
+    public MenuGUI(JPanel panel, JFrame frame){
+        this.frame = frame;
         MenuBUS bus = new MenuBUS();
         listIcon = bus.getIcon();
         listOption = bus.getOption();
@@ -35,7 +37,7 @@ public class MenuGUI extends JPanel implements MouseListener {
         JPanel panelIcon = new JPanel(null);
         panelIcon.setPreferredSize(new Dimension(200, 200));
         panelIcon.setBackground(Color.decode("#004D40"));
-        JLabel label = new JLabel(createIcon("user.png", 180), JLabel.CENTER);
+        JLabel label = new JLabel(createIcon("man.png", 180), JLabel.CENTER);
         label.setBounds(10, 10, 180, 180);
         panelIcon.add(label);
         add(panelIcon);
@@ -43,6 +45,8 @@ public class MenuGUI extends JPanel implements MouseListener {
             listPanel[i] = new JPanel();
             add(makePanel(listPanel[i], listOption[i], createIcon(listIcon[i], 30)));
         }
+        logOut = new JPanel();
+        add(makePanel(logOut, "LogOut", createIcon("logout.png", 30)));
     }
     public JPanel makePanel(JPanel p, String value, ImageIcon icon){
         JLabel labelText = new JLabel(value);
@@ -104,6 +108,29 @@ public class MenuGUI extends JPanel implements MouseListener {
                 panel.repaint();
                 panel.revalidate();
                 break;
+
+                case "Phiếu nhập":
+                panel.removeAll();
+                panel.add(contentOption.phieuNhap());
+                panel.repaint();
+                panel.revalidate();
+                break;
+
+            case "Order":
+                panel.removeAll();
+                panel.add(contentOption.banHang());
+                panel.repaint();
+                panel.revalidate();
+                break;
+            case "Đơn hàng":
+                panel.removeAll();
+                panel.add(contentOption.donHang());
+                panel.repaint();
+                panel.revalidate();
+                break;
+            case "LogOut":
+                frame.dispose();
+                new LoginGUI();
         }
 
     }
@@ -126,6 +153,9 @@ public class MenuGUI extends JPanel implements MouseListener {
                 break;
             }
         }
+        if(e.getSource() == logOut){
+            logOut.setBackground(Color.decode("#009688"));
+        }
 
     }
 
@@ -135,10 +165,8 @@ public class MenuGUI extends JPanel implements MouseListener {
         if(hover != currentClick){
             hover.setBackground(Color.decode("#004D40"));
         }
-//        if(hover == currentClick){
-//            hover.setBackground(Color.decode("#009688"));
-//        } else {
-
-//        }
+        if(e.getSource() == logOut){
+            logOut.setBackground(Color.decode("#004D40"));
+        }
     }
 }

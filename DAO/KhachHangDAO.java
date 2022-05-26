@@ -2,12 +2,18 @@ package task1.DAO;
 
 import task1.DTO.KhachHangDTO;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class KhachHangDAO extends DB{
     private ArrayList<HashMap<String, String>> arrMap;
     private ArrayList<HashMap<String, String>> arrSearch;
+    private ResultSet rs = null;
+    private ArrayList<KhachHangDTO> dskh = new ArrayList<>();
     public KhachHangDAO(){
         connect();
         arrMap = new ArrayList<HashMap<String, String>>(selectAll("khachhang", "WHERE TrangThai = 1"));
@@ -108,5 +114,30 @@ public class KhachHangDAO extends DB{
         int code = selectOnceRow("khachhang", "ORDER BY Makh DESC LIMIT 1", "Makh");
         closeConnect();
         return code + 1;
+    }
+    //Đạt
+    public ArrayList<KhachHangDTO> getKhachHangTheoMa(String makh){
+        DB conn = new DB();
+        conn.connect();
+        try{
+            String sql = "select * from khachhang where makh =?";
+            PreparedStatement stm = conn.getConnection().prepareStatement(sql);
+            stm.setString(1,makh);
+            rs = conn.executeQuery(stm);
+            if(rs!=null)
+                while(rs.next()){
+                    KhachHangDTO kh = new KhachHangDTO();
+                    kh.setMakh(rs.getString("Makh"));
+                    kh.setTen(rs.getString("Ten"));
+                    kh.setDiaChi(rs.getString("DiaChi"));
+                    kh.setSDT(rs.getString("SDT"));
+                    dskh.add(kh);
+                }
+        }catch (Exception e){
+            Logger.getLogger(KhachHangDAO.class.getName()).log(Level.SEVERE,null,e);
+        }finally {
+            conn.closeConnect();
+        }
+        return dskh;
     }
 }

@@ -102,15 +102,17 @@ public class AccountBUS {
         dao.addDAO(obj);
     }
 
-    public void editBUS(JTextField[] textFields, String nameImage, int rowSelect){
+    public void editBUS(JTextField[] textFields, String nameImage, int rowSelect, int passChange){
         AccountDTO obj = new AccountDTO();
         obj.setUsername(textFields[0].getText());
-        obj.setPassword(udao.getSecurityMD5(textFields[1].getText()));
-        textFields[1].setText(obj.getPassword());
+        if(passChange == 1){
+            obj.setPassword(udao.getSecurityMD5(textFields[1].getText()));
+            textFields[1].setText(obj.getPassword());
+        }
         obj.setEmail(textFields[3].getText());
         obj.setManv(textFields[4].getText());
         obj.setUrlHinh(nameImage);
-        dao.updateDAO(obj, rowSelect);
+        dao.updateDAO(obj, rowSelect, passChange);
     }
 
     public void deleteBUS(JTextField[] textField, int status, int rowSelect){

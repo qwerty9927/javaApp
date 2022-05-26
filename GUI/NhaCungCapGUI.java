@@ -129,6 +129,7 @@ public class NhaCungCapGUI extends JPanel {
 
     public JButton addController(){
         btnAdd = createBtn("Thêm");
+        RoundedBorder.BorderRadius1(btnAdd);
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -136,10 +137,16 @@ public class NhaCungCapGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Tên không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else {
                         bus.addBUS(textFields);
                         JOptionPane.showMessageDialog(null, "Thêm thành công");
@@ -164,6 +171,7 @@ public class NhaCungCapGUI extends JPanel {
 
     public JButton editController(){
         btnEdit = createBtn("Sửa");
+        RoundedBorder.BorderRadius1(btnEdit);
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -171,10 +179,16 @@ public class NhaCungCapGUI extends JPanel {
                     int result = bus.checkBUS(textFields);
                     if(result == 1){
                         JOptionPane.showMessageDialog(null, "Tên không hợp lệ");
+                        textFields[1].requestFocus();
+                        textFields[1].selectAll();
                     } else if(result == 2){
                         JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+                        textFields[2].requestFocus();
+                        textFields[2].selectAll();
                     } else if(result == 3){
                         JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+                        textFields[3].requestFocus();
+                        textFields[3].selectAll();
                     } else {
                         bus.editBUS(textFields, rowSelect);
                         JOptionPane.showMessageDialog(null, "Sửa thành công");
@@ -196,6 +210,7 @@ public class NhaCungCapGUI extends JPanel {
 
     public JButton deleteController(){
         btnDelete = createBtn("Xóa");
+        RoundedBorder.BorderRadius1(btnDelete);
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -30,7 +30,8 @@ public class UserModifyDAO {
                         resultSet.getString("email"),
                         resultSet.getString("password"),
                         resultSet.getInt("role_id"),
-                        resultSet.getInt("active")
+                        resultSet.getInt("active"),
+                        resultSet.getString("Manv")
                 );
                 dataList.add(u);
             }
@@ -77,8 +78,9 @@ public class UserModifyDAO {
                         resultSet.getString("email"),
                         resultSet.getString("password"),
                         resultSet.getInt("role_id"),
-                        resultSet.getInt("active")
-                );
+                        resultSet.getInt("active"),
+                        resultSet.getString("Manv")
+                        );
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserModifyDAO.class.getName()).log(Level.SEVERE, null, ex);
